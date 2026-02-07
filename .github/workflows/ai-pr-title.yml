@@ -64,7 +64,7 @@ jobs:
                 role: "system",
                 content: [
                   {
-                    type: "text",
+                    type: "input_text",
                     text: "You generate PR titles following Conventional Commits (type(scope): description). Output ONLY the title line."
                   }
                 ]
@@ -73,7 +73,7 @@ jobs:
                 role: "user",
                 content: [
                   {
-                    type: "text",
+                    type: "input_text",
                     text: ("Here are the commit messages:\n\n" + $commits + "\n\nGenerate a single PR title in the format: type(scope): Short description")
                   }
                 ]
@@ -94,10 +94,18 @@ jobs:
             exit 1
           fi
 
-          # Pull the first output_text chunk, first line only, normalize to one line
-          RAW_TITLE="$(echo "$RESPONSE" | jq -r '.output[]? | select(.type=="message") | .content[]? | select(.type=="output_text") | .text' | sed -n '1p')"
-          TITLE="$(printf '%s' "$RAW_TITLE" | tr '\n' ' ' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          # Best-effort extract the model's text (first output_text chunk), first line only
+          RAW_TITLE="$(echo "$RESPONSE" | jq -r '
+            (.output[]? | select(.type=="message") | .content[]? | select(.type=="output_text") | .text) // empty
+          ' | sed -n '1p')"
 
+          if [[ -z "${RAW_TITLE:-}" ]]; then
+            echo "❌ Could not extract title from response:"
+            echo "$RESPONSE" | jq .
+            exit 1
+          fi
+
+          TITLE="$(printf '%s' "$RAW_TITLE" | tr '\n' ' ' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
           echo "AI suggested title: $TITLE"
 
           {
@@ -108,11 +116,13 @@ jobs:
 
       - name: Validate PR Title
         id: validate-title
+        shell: bash
         run: |
+          set -euo pipefail
+
           PR_TITLE="${{ steps.get-pr-title.outputs.pr_title }}"
           AI_TITLE="${{ steps.ai.outputs.title }}"
 
-          # Regex for Conventional Commits format
           CONVENTIONAL_COMMIT_REGEX="^(feat|fix|docs|style|refactor|test|chore|build|ci|perf)(\(.*\))?: .+"
 
           echo "🔍 Current PR Title: $PR_TITLE"
@@ -121,14 +131,14 @@ jobs:
           if [[ -z "$PR_TITLE" || ! "$PR_TITLE" =~ $CONVENTIONAL_COMMIT_REGEX ]]; then
             echo "❌ PR Title is missing or not in Conventional Commits format."
             echo "✅ Using AI-generated title: $AI_TITLE"
-            echo "update_needed=true" >> $GITHUB_ENV
+            echo "update_needed=true" >> "$GITHUB_OUTPUT"
           else
             echo "✅ PR Title is already valid."
-            echo "update_needed=false" >> $GITHUB_ENV
+            echo "update_needed=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Update PR Title if Invalid or Empty
-        if: env.update_needed == 'true'
+        if: ${{ steps.validate-title.outputs.update_needed == 'true' }}
         uses: actions/github-script@v7
         with:
           script: |
@@ -137,6 +147,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number,
-              title: title
+              title
             });
             console.log(`✅ PR title updated to: "${title}"`);
