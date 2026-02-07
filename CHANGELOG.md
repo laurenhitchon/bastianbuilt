@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.0.0...v1.1.0) (2026-02-07)
+
+
+### Features
+
+* **contact.tsx:** Update contact info, social media links, and section titles for clarity and accuracy ([#3](https://github.com/laurenhitchon/bastianbuilt/issues/3)) ([7cce857](https://github.com/laurenhitchon/bastianbuilt/commit/7cce85743277916c6fad7c51107522943e92fcc5))
+
 # 1.0.0 (2026-02-07)
 
 
