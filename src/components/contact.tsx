@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Mail } from 'lucide-react'
+import { Instagram, Mail } from 'lucide-react'
+
 import type React from 'react'
 import { useState } from 'react'
 
@@ -55,7 +56,7 @@ export function Contact() {
             transition={{ duration: 0.6 }}
             className='mb-16 text-center'
           >
-            <h2 className='mb-4 text-4xl font-bold md:text-5xl'>Let&apos;s Collaborate</h2>
+            <h2 className='mb-4 text-4xl font-bold md:text-5xl'>Start a Project</h2>
             <p className='mx-auto max-w-2xl text-lg text-muted-foreground'>
               Have a project in mind? I&apos;m always interested in discussing new opportunities and
               innovative design challenges.
@@ -154,11 +155,10 @@ export function Contact() {
                   {[
                     {
                       icon: Mail,
-                      text: 'contact@bastianbuilt.com',
-                      href: 'mailto:contact@bastianbuilt.com',
+                      text: 'bastian@hitchon.me',
+                      href: 'mailto:bastian@hitchon.me',
                     },
-                    { icon: Linkedin, text: 'LinkedIn', href: 'https://linkedin.com' },
-                    { icon: Github, text: 'GitHub', href: 'https://github.com' },
+                    { icon: Instagram, text: 'Instagram', href: 'instagram.com/bastian.built/' },
                   ].map((link, index) => (
                     <motion.a
                       key={link.text}
@@ -187,9 +187,9 @@ export function Contact() {
               >
                 <h3 className='mb-4 text-xl font-bold'>Location</h3>
                 <p className='text-muted-foreground'>
-                  Available for remote collaboration
+                  Available for online projects
                   <br />
-                  and on-site consultations
+                  and local on-site consults
                 </p>
               </motion.div>
             </motion.div>
