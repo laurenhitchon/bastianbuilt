@@ -41,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`font-sans antialiased ${_dmSans.className} ${_spaceMono.className}`}>
+      <body className={`font-sans antialiased ${_dmSans.className}`}>
         {children}
         <Analytics />
       </body>
