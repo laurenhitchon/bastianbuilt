@@ -1,11 +1,14 @@
 import '@/app/globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
-import { IBM_Plex_Mono, Inter } from 'next/font/google'
+import { DM_Sans, Space_Mono } from 'next/font/google'
 import type React from 'react'
 
-const _inter = Inter({ subsets: ['latin'] })
-const _ibmMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '700'] })
+const _dmSans = DM_Sans({ subsets: ['latin'] })
+const _spaceMono = Space_Mono({
+  subsets: ['latin'],
+  weight: '400',
+})
 
 export const metadata: Metadata = {
   title: 'Bastian Built - Industrial Design Portfolio',
@@ -38,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`font-sans antialiased ${_inter.className} ${_ibmMono.className}`}>
+      <body className={`font-sans antialiased ${_dmSans.className} ${_spaceMono.className}`}>
         {children}
         <Analytics />
       </body>
