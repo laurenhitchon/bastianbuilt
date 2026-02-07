@@ -46,7 +46,7 @@ jobs:
             console.log(`Current PR title: "${pr.title}"`);
             core.setOutput("pr_title", pr.title);
 
-      -       - name: Generate PR title with OpenAI (Responses API)
+      - name: Generate PR title with OpenAI (Responses API)
         id: ai
         if: ${{ steps.commits.outputs.commits != '' }}
         shell: bash
