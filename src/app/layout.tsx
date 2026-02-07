@@ -1,11 +1,11 @@
 import '@/app/globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { IBM_Plex_Mono, Inter } from 'next/font/google'
 import type React from 'react'
 
-const _geist = Geist({ subsets: ['latin'] })
-const _geistMono = Geist_Mono({ subsets: ['latin'] })
+const _inter = Inter({ subsets: ['latin'] })
+const _ibmMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '700'] })
 
 export const metadata: Metadata = {
   title: 'Bastian Built - Industrial Design Portfolio',
@@ -38,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`font-sans antialiased ${_geist.className} ${_geistMono.className}`}>
+      <body className={`font-sans antialiased ${_inter.className} ${_ibmMono.className}`}>
         {children}
         <Analytics />
       </body>
