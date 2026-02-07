@@ -47,7 +47,7 @@ export function Header() {
     >
       <div className='container mx-auto px-6 lg:px-12'>
         <div className='flex h-20 items-center justify-between'>
-          <Link href='/' className='relative flex h-10 w-48 items-center'>
+          <Link href='/' className='relative flex h-10 w-48 cursor-pointer items-center'>
             <motion.div
               className='relative h-full w-full'
               whileHover={{ scale: 1.05 }}
@@ -72,7 +72,7 @@ export function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
                 onClick={() => handleNavigation(section)}
-                className='group relative text-sm text-muted-foreground transition-colors hover:text-foreground'
+                className='group relative cursor-pointer text-base text-muted-foreground transition-colors hover:text-foreground'
               >
                 {section.charAt(0).toUpperCase() + section.slice(1)}
                 <motion.span
