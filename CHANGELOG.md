@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.1.0...v1.2.0) (2026-02-11)
+
+
+### Features
+
+* **github-actions:** enhance AI PR title generator workflow with improved validation and configuration handling ([#5](https://github.com/laurenhitchon/bastianbuilt/issues/5)) ([87de51f](https://github.com/laurenhitchon/bastianbuilt/commit/87de51fac295dcbdce3dca18ffadbef2ff84cdba))
+
 # [1.1.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.0.0...v1.1.0) (2026-02-07)
 
 
