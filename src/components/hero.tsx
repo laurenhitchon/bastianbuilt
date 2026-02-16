@@ -27,7 +27,7 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.6, 0.05, 0.01, 0.9] }}
             className='mb-6 text-6xl font-bold text-balance md:text-8xl'
           >
-            Industrial Designer
+            Industrial Design & 3D Printing
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 50 }}
