@@ -18,6 +18,97 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'yzf-r7-pod-filter-airbox',
+    title: 'YZF-R7 Pod Filter Airbox',
+    description:
+      'Custom 3D printed pod filter airbox for the Yamaha YZF-R7, designed from full 3D scan data for precise fitment and clean integration.',
+    image: '/yzf-r7-pod-filter-airbox/DUuIP8kkjld_1.jpg',
+    tags: ['Yamaha', 'YZF-R7', 'Airbox'],
+    overview:
+      'This custom YZF-R7 pod filter airbox began with a full 3D scan of the intake area to capture every mounting point, contour, and clearance. A replica model of the DNA pod filter was created to ensure perfect alignment from the outset. Designed entirely in Fusion 360 around real-world scan data, the airbox delivers precise fitment, structural integrity, and a clean OEM-plus look once installed. Printed in multiple materials to balance strength, heat resistance, and flexibility, it features brass inserts, a serviceable lid, and a hex rear vent for controlled airflow. Clean on the bike. Functional by design.',
+    features: [
+      'Full 3D scan-based design for exact fitment and clearance control',
+      'Replica-modeled DNA pod filter for precision integration',
+      'Multi-material construction for strength and flexibility',
+      'Serviceable lid with brass threaded inserts',
+      'Hex-pattern rear vent for controlled airflow and visual detail',
+    ],
+    specs: [
+      { label: 'Material', value: 'ASA-CF (shell), TPU (flexible joiners), Brass inserts' },
+      { label: 'Print Method', value: 'FDM 3D Printing (Multi-material)' },
+      { label: 'Weight', value: 'Custom application – lightweight performance-focused design' },
+      { label: 'Dimensions', value: 'Designed specifically for Yamaha YZF-R7 intake area' },
+      {
+        label: 'Post-Processing',
+        value: 'Heat-set brass inserts, assembly hardware installation, final fitment testing',
+      },
+    ],
+    process: [
+      'Full 3D scan of the YZF-R7 intake and surrounding frame area',
+      'Digital cleanup and preparation of scan data',
+      'Creation of a replica DNA pod filter model for accurate fit',
+      'Airbox design in Fusion 360 around real-world geometry',
+      'Multi-material print preparation and prototyping',
+      'Final printing, hardware installation, and on-bike fitment validation',
+    ],
+    gallery: [
+      '/yzf-r7-pod-filter-airbox/DUuIP8kkjld_1.jpg',
+      '/yzf-r7-pod-filter-airbox/DUuIP8kkjld_2.jpg',
+      '/yzf-r7-pod-filter-airbox/DUuIP8kkjld_3.jpg',
+      '/yzf-r7-pod-filter-airbox/DUuIP8kkjld_4.jpg',
+      '/yzf-r7-pod-filter-airbox/DUuIP8kkjld_5.jpg',
+      '/yzf-r7-pod-filter-airbox/DUuIP8kkjld_6.jpg',
+    ],
+  },
+  {
+    slug: 'ute-tray-accessory-design-kt-kustoms',
+    title: 'Ute Tray & Accessory Design – KT Kustoms',
+    description:
+      'Custom ute tray design work for KT Kustoms featuring honeycomb headboard infills with integrated logos, precision tail light cutouts, and machine-ready fabrication plans.',
+    image: '/ute-tray-and-accessory-design/DUxqybukrQz_1.jpg',
+    tags: ['Ute Tray', 'Fabrication Design', 'KT Kustoms'],
+    overview:
+      'Recent ute tray and accessory design work completed for KT Kustoms, focused on precision-cut components and custom branding integration. The project included honeycomb headboard infills with integrated business logos, purpose-designed tail light cutouts to suit HiMod4x4 Drakon / Jimny lights and Stedi flush mount lights, and custom rear sections with truck-style lighting and twin exhaust ports. Each component was digitally designed for high accuracy, reduced fabrication time, and optimal material usage. The result is a clean, professional tray that stands out both on site and on the road.',
+    features: [
+      'Custom honeycomb headboard infills with integrated business logos',
+      'Precision cutouts for HiMod4x4 Drakon / Jimny tail lights',
+      'Stedi flush mount light compatibility',
+      'Retrofit honeycomb infill options for existing headboards',
+      'Custom rear section with truck-style tail light cutouts and twin exhaust ports',
+    ],
+    specs: [
+      {
+        label: 'Material',
+        value: 'Designed for steel or aluminium tray fabrication (as specified by builder)',
+      },
+      { label: 'Print Method', value: 'CAD design with CNC / laser-cut ready files' },
+      { label: 'Weight', value: 'Varies depending on tray configuration and material selection' },
+      {
+        label: 'Dimensions',
+        value: 'Custom designed to suit specific ute tray and headboard setups',
+      },
+      {
+        label: 'Post-Processing',
+        value: 'Welding, finishing, and coating completed by fabricator (KT Kustoms)',
+      },
+    ],
+    process: [
+      'Concept development in collaboration with KT Kustoms',
+      'Digital design of honeycomb infill panels with integrated branding',
+      'Precision modeling of tail light and accessory cutouts',
+      'Preparation of machine-ready cutting files',
+      'Material optimisation for reduced waste and faster fabrication',
+      'Final fabrication, welding, and fitment by KT Kustoms',
+    ],
+    gallery: [
+      '/ute-tray-and-accessory-design/DUxqybukrQz_1.jpg',
+      '/ute-tray-and-accessory-design/DUxqybukrQz_2.jpg',
+      '/ute-tray-and-accessory-design/DUxqybukrQz_3.jpg',
+      '/ute-tray-and-accessory-design/DUxqybukrQz_4.jpg',
+      '/ute-tray-and-accessory-design/DUxqybukrQz_5.jpg',
+    ],
+  },
+  {
     slug: 'cbr600rr-engine-case-cover',
     title: 'CBR600RR Engine Case Cover',
     description:
@@ -56,7 +147,6 @@ export const projects: Project[] = [
       '/cbr600rr-engine-case-cover/cbr600rr-engine-case-cover-3d-printing.mp4',
     ],
   },
-
   {
     slug: 'cbr600rr-gp-style-front-fender-prototype',
     title: 'CBR600RR GP Style Front Fender Prototype',
@@ -89,13 +179,12 @@ export const projects: Project[] = [
       'Iterate based on fitment and visual/aero intent',
     ],
     gallery: [
-      '/cbr600rr-gp-style-front-fender-prototype/cbr600rr-gp-style-front-fender-prototype 1.jpg',
-      '/cbr600rr-gp-style-front-fender-prototype/cbr600rr-gp-style-front-fender-prototype 2.jpg',
+      '/cbr600rr-gp-style-front-fender-prototype/cbr600rr-gp-style-front-fender-prototype-1.jpg',
+      '/cbr600rr-gp-style-front-fender-prototype/cbr600rr-gp-style-front-fender-prototype-2.jpg',
       '/cbr600rr-gp-style-front-fender-prototype/red-motorcycle-front-fender-prototype-1.jpg',
       '/cbr600rr-gp-style-front-fender-prototype/red-motorcycle-front-fender-prototype-2.jpg',
     ],
   },
-
   {
     slug: '1780-x-2000-mm-tray-ln106-single-cab-beta-design',
     title: '1780 × 2000 mm Tray — LN106 Single Cab (Beta Design)',
@@ -132,7 +221,6 @@ export const projects: Project[] = [
       '/1780-×-2000-mm-tray-ln106-single-cab-beta-design/utility-tray-design-single-cab.mp4',
     ],
   },
-
   {
     slug: 'engine-covers-cbr600-f2-f3',
     title: 'Engine Covers — CBR600 F2/F3',
@@ -173,7 +261,6 @@ export const projects: Project[] = [
       '/engine-covers-cbr600-f2f3/motorcycle-engine-cover-design.jpg',
     ],
   },
-
   {
     slug: 'want-the-coolest-bin-on-the-block',
     title: 'BINRIMS — Wheelie Bin Rims',
@@ -212,7 +299,6 @@ export const projects: Project[] = [
       '/binrims/stylish-green-bin-design.jpg',
     ],
   },
-
   {
     slug: 'subwoofer-box-fg-falcon-ute',
     title: 'Subwoofer Box — FG Falcon Ute',
@@ -249,7 +335,6 @@ export const projects: Project[] = [
       '/subwoofer-box-fg-falcon-ute/subwoofer-box-design-2.jpg',
     ],
   },
-
   {
     slug: 'wheelchair-footrest-replacement',
     title: 'Wheelchair Footrest Replacement',
@@ -288,7 +373,6 @@ export const projects: Project[] = [
       '/wheelchair-footrest-replacement/wheelchair-footrest-replacement-3.jpg',
     ],
   },
-
   {
     slug: 'mid-century-home-1-64-scale-model',
     title: 'Mid-Century Home — 1:64 Scale Model',
@@ -326,7 +410,6 @@ export const projects: Project[] = [
       '/architectural-model/architectural-model-on-wooden-table-2.jpg',
     ],
   },
-
   {
     slug: 'axle-sliders',
     title: 'Axle Sliders + Quad Lock Handlebar Mount',
@@ -364,7 +447,6 @@ export const projects: Project[] = [
       '/axle-sliders/motorcycle-rear-wheel-and-exhaust.jpg',
     ],
   },
-
   {
     slug: '97-hilux-extra-cab-rn110r-tray-build',
     title: '’97 Hilux Extra Cab (RN110R) — Tray Build',
@@ -404,7 +486,6 @@ export const projects: Project[] = [
       '/97-hilux-extra-cab-rn110r-tray-build/off-road-vehicle-frame.jpg',
     ],
   },
-
   {
     slug: 'n50-hilux-toyota-grill-badge',
     title: 'N50 Hilux TOYOTA Grill Badge',
@@ -443,6 +524,44 @@ export const projects: Project[] = [
       '/n50-hilux-toyota-grill-badge/toyota-hilux-front-view.jpg',
     ],
   },
+  /* {
+    slug: '',
+    title: '',
+    description:
+      '',
+    image: '/',
+    tags: ['', '', ''],
+    overview:
+      '',
+    features: [
+      '',
+      '',
+      '',
+      '',
+      '',
+    ],
+    specs: [
+      { label: 'Material', value: '' },
+      { label: 'Print Method', value: '' },
+      { label: 'Weight', value: '' },
+      { label: 'Dimensions', value: '' },
+      { label: 'Post-Processing', value: '' },
+    ],
+    process: [
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+    ],
+    gallery: [
+      '/',
+      '/',
+      '/',
+      '/',
+    ],
+  }, */
 ]
 
 export function getProjectBySlug(slug: string): Project | undefined {
