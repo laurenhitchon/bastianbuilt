@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.2.0...v1.3.0) (2026-02-18)
+
+
+### Features
+
+* **sitemap.ts:** add sitemap generation functionality to improve SEO and site navigation ([#7](https://github.com/laurenhitchon/bastianbuilt/issues/7)) ([bfb694a](https://github.com/laurenhitchon/bastianbuilt/commit/bfb694ad3b39f4b6f3276932171adc7fd3d13ccb))
+
 # [1.2.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.1.0...v1.2.0) (2026-02-11)
 
 
