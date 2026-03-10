@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.3.0...v1.4.0) (2026-03-10)
+
+
+### Features
+
+* **git-commit.sh:** enhance commit script with push options for better workflow ([#9](https://github.com/laurenhitchon/bastianbuilt/issues/9)) ([a7cc0f6](https://github.com/laurenhitchon/bastianbuilt/commit/a7cc0f6e76d01cc432e3d81bb3fbf32d831706c8))
+
 # [1.3.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.2.0...v1.3.0) (2026-02-18)
 
 
