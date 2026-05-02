@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.4.0...v1.5.0) (2026-05-02)
+
+
+### Features
+
+* **branch-name-config:** Refactor GitHub workflows and branch name validation, fix scripts and import paths, and improve TypeScript and user experience ([#10](https://github.com/laurenhitchon/bastianbuilt/issues/10)) ([99e6e43](https://github.com/laurenhitchon/bastianbuilt/commit/99e6e43d4c49c61d236fc7c779cf70e515a730bc))
+
 # [1.4.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.3.0...v1.4.0) (2026-03-10)
 
 
