@@ -1,14 +1,11 @@
-import '@/app/globals.css'
+import './globals.css'
+
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
-import { DM_Sans, Space_Mono } from 'next/font/google'
+import { DM_Sans } from 'next/font/google'
 import type React from 'react'
 
 const _dmSans = DM_Sans({ subsets: ['latin'] })
-const _spaceMono = Space_Mono({
-  subsets: ['latin'],
-  weight: '400',
-})
 
 export const metadata: Metadata = {
   title: 'Bastian Built - Industrial Design Portfolio',
@@ -40,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
+    <html data-scroll-behavior='smooth' lang='en'>
       <body className={`font-sans antialiased ${_dmSans.className}`}>
         {children}
         <Analytics />
