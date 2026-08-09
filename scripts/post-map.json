@@ -1,0 +1,104 @@
+{
+  "_comment": [
+    "Maps an Instagram shortcode to the project it belongs to on the site.",
+    "",
+    "  slug   - must match the `slug` in src/lib/projects.ts",
+    "  dir    - folder under public/ holding this project's media",
+    "  locked - true means the media in public/<dir>/ has been hand-curated",
+    "           (renamed files, chosen order). export_instagram_posts.py will",
+    "           never download over it or rename anything. Set this once a post",
+    "           has a finished entry in projects.ts.",
+    "",
+    "New posts are appended automatically on each run with locked: false."
+  ],
+  "DbwkTq1E8GX": {
+    "slug": "folded-sheet-wheel-guards",
+    "dir": "folded-sheet-wheel-guards",
+    "locked": true
+  },
+  "Dbsbl2Mk7Op": {
+    "slug": "parts-behind-the-projects",
+    "dir": "parts-behind-the-projects",
+    "locked": true
+  },
+  "DZbb6b-k6F2": {
+    "slug": "tray-design-np300",
+    "dir": "tray-design-np300",
+    "locked": true
+  },
+  "DZZgm3Ak2VY": {
+    "slug": "tray-tailboard-kt-kustoms",
+    "dir": "tray-tailboard-kt-kustoms",
+    "locked": true
+  },
+  "DZRwFqvEyEq": {
+    "slug": "einstar-2-3d-scanner",
+    "dir": "einstar-2-3d-scanner",
+    "locked": true
+  },
+  "DUxqybukrQz": {
+    "slug": "ute-tray-accessory-design-kt-kustoms",
+    "dir": "ute-tray-and-accessory-design",
+    "locked": true
+  },
+  "DUuIP8kkjld": {
+    "slug": "yzf-r7-pod-filter-airbox",
+    "dir": "yzf-r7-pod-filter-airbox",
+    "locked": true
+  },
+  "DTLKzXdElNB": {
+    "slug": "cbr600rr-engine-case-cover",
+    "dir": "cbr600rr-engine-case-cover",
+    "locked": true
+  },
+  "DRvVpUMElAw": {
+    "slug": "cbr600rr-gp-style-front-fender-prototype",
+    "dir": "cbr600rr-gp-style-front-fender-prototype",
+    "locked": true
+  },
+  "DQfrRN9kmBG": {
+    "slug": "1780-x-2000-mm-tray-ln106-single-cab-beta-design",
+    "dir": "1780-×-2000-mm-tray-ln106-single-cab-beta-design",
+    "locked": true
+  },
+  "DQeBBK1EjCQ": {
+    "slug": "engine-covers-cbr600-f2-f3",
+    "dir": "engine-covers-cbr600-f2f3",
+    "locked": true
+  },
+  "DQd8fe0EpMv": {
+    "slug": "want-the-coolest-bin-on-the-block",
+    "dir": "binrims",
+    "locked": true
+  },
+  "DQd6DSlkuXV": {
+    "slug": "subwoofer-box-fg-falcon-ute",
+    "dir": "subwoofer-box-fg-falcon-ute",
+    "locked": true
+  },
+  "DQd4UQREoit": {
+    "slug": "wheelchair-footrest-replacement",
+    "dir": "wheelchair-footrest-replacement",
+    "locked": true
+  },
+  "DQdbu_lEo3v": {
+    "slug": "mid-century-home-1-64-scale-model",
+    "dir": "architectural-model",
+    "locked": true
+  },
+  "DQdZ38nEs2a": {
+    "slug": "axle-sliders",
+    "dir": "axle-sliders",
+    "locked": true
+  },
+  "DQdSgWvEvXz": {
+    "slug": "97-hilux-extra-cab-rn110r-tray-build",
+    "dir": "97-hilux-extra-cab-rn110r-tray-build",
+    "locked": true
+  },
+  "DQYyxZMkizD": {
+    "slug": "n50-hilux-toyota-grill-badge",
+    "dir": "n50-hilux-toyota-grill-badge",
+    "locked": true
+  }
+}
