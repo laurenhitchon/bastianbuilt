@@ -1,0 +1,27 @@
+# Vendored from digitalnsw/nswds-devops for this personal repository.
+# The reusable workflow is SHA-pinned below and updated through Renovate.
+# The implementation lives in that repo's reusable-commit-types-sync.yml.
+# The path filters live HERE because workflow_call has none.
+name: Commit type sync
+
+on:
+  pull_request:
+    paths:
+      - commit-types.mjs
+      - git-conventional-commits.yaml
+      - scripts/conventional-commit-config.sh
+      - scripts/check-commit-types-sync.sh
+  push:
+    branches: [main]
+    paths:
+      - commit-types.mjs
+      - git-conventional-commits.yaml
+      - scripts/conventional-commit-config.sh
+      - scripts/check-commit-types-sync.sh
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    uses: digitalnsw/nswds-devops/.github/workflows/reusable-commit-types-sync.yml@a244014e317c6ab661d7c53ecd9152773b87c3be # v1

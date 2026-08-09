@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
 import { getDb } from '@/lib/db'
 import { contacts } from '@/lib/schema'
+import { NextResponse } from 'next/server'
+import { Resend } from 'resend'
 
 export async function POST(request: Request) {
   try {
@@ -28,10 +28,7 @@ export async function POST(request: Request) {
 
     // Send email via Resend
     if (!process.env.RESEND_API_KEY) {
-      return NextResponse.json(
-        { error: 'Server email configuration missing' },
-        { status: 500 },
-      )
+      return NextResponse.json({ error: 'Server email configuration missing' }, { status: 500 })
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY)

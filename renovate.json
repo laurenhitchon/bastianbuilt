@@ -1,0 +1,9 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Personal-repository overlay on the public NSWDS maintenance preset. Security alerts are re-enabled because this repository does not use the DigitalNSW Snyk integration.",
+  "extends": ["github>digitalnsw/nswds-devops"],
+  "enabledManagers": ["npm", "github-actions"],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  }
+}

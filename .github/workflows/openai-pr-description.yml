@@ -1,6 +1,11 @@
+# Vendored from digitalnsw/nswds-devops for this personal repository.
+# The reusable workflow is SHA-pinned below and updated through Renovate.
+# The implementation lives in that repo's reusable-openai-pr-description.yml.
 name: Autofill PR description
 
-on: pull_request
+on:
+  pull_request:
+    types: [opened]
 
 permissions:
   contents: read
@@ -8,10 +13,11 @@ permissions:
 
 jobs:
   openai-pr-description:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: platisd/openai-pr-description@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+    uses: digitalnsw/nswds-devops/.github/workflows/reusable-openai-pr-description.yml@a244014e317c6ab661d7c53ecd9152773b87c3be # v1
+    secrets:
+      # Explicit mapping, not inherit — this workflow gets only the secrets it
+      # uses; inherit would hand every repo secret to the called workflow.
+      # AI_GATEWAY_API_KEY is an org-level secret (Vercel AI Gateway).
+      AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+      # Optional Azure OpenAI fallback key (used only on gateway HTTP 402).
+      AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}

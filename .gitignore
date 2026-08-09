@@ -39,7 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/scripts
+
+# Keep local content-enrichment tooling ignored while allowing the shared
+# nswds-devops shell scripts and hook templates to be versioned.
+/scripts/*
+!/scripts/*.sh
+!/scripts/husky/
+!/scripts/husky/*
 
 /.claude
 .claude
