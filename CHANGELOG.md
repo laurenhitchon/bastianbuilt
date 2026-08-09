@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.5.0...v1.6.0) (2026-08-09)
+
+
+### Features
+
+* **scripts:** add Instagram content pipeline with AI-drafted project copy ([#11](https://github.com/laurenhitchon/bastianbuilt/issues/11)) ([8950c7c](https://github.com/laurenhitchon/bastianbuilt/commit/8950c7c0bd3b2ceb4d4429a2a11fa39a8f1018bd))
+
 # [1.5.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.4.0...v1.5.0) (2026-05-02)
 
 
