@@ -21,25 +21,74 @@ CONVENTIONAL_COMMIT_REGEX="$("$CONVENTIONAL_CONFIG_SCRIPT" regex)"
 CONVENTIONAL_COMMIT_TYPES_CSV="$("$CONVENTIONAL_CONFIG_SCRIPT" csv)"
 DEFAULT_CONVENTIONAL_COMMIT_TYPE="$("$CONVENTIONAL_CONFIG_SCRIPT" safe-default)"
 
-# OpenAI credentials (Fix #2)
-if [[ -z "${OPENAI_API_KEY:-}" ]]; then
-  printf "❌ OPENAI_API_KEY is not set. Export it in your shell before running this script.\n"
+# AI Gateway credentials (Fix #2)
+if [[ -z "${AI_GATEWAY_API_KEY:-}" ]]; then
+  printf "❌ AI_GATEWAY_API_KEY is not set. Export it in your shell before running this script.\n"
   exit 1
 fi
 
-# OpenAI model + output token limit (tunable)
-OPENAI_MODEL="${OPENAI_MODEL:-gpt-4o-mini}"
-OPENAI_MAX_OUTPUT_TOKENS="${OPENAI_MAX_OUTPUT_TOKENS:-250}"
+# Shared OpenAI request helper (model defaults + openai_responses_text()).
+OPENAI_REQUEST_SCRIPT="${SCRIPT_DIR}/openai-request.sh"
+if [[ ! -f "$OPENAI_REQUEST_SCRIPT" ]]; then
+  printf "❌ OpenAI request helper not found: %s\n" "$OPENAI_REQUEST_SCRIPT"
+  exit 1
+fi
+# shellcheck source=./openai-request.sh
+source "$OPENAI_REQUEST_SCRIPT"
+
+# Shared secret detection + redaction (single source of truth).
+SECRET_REDACTION_SCRIPT="${SCRIPT_DIR}/secret-redaction.sh"
+if [[ ! -f "$SECRET_REDACTION_SCRIPT" ]]; then
+  printf "❌ Secret redaction helper not found: %s\n" "$SECRET_REDACTION_SCRIPT"
+  exit 1
+fi
+# shellcheck source=./secret-redaction.sh
+source "$SECRET_REDACTION_SCRIPT"
+
+# Reasoning models spend output tokens on hidden reasoning, so they need a
+# larger budget than the gpt-4 family to actually emit the commit message.
+if [[ "$OPENAI_MODEL_FAMILY" == "reasoning" ]]; then
+  OPENAI_MAX_OUTPUT_TOKENS="${OPENAI_MAX_OUTPUT_TOKENS:-2000}"
+else
+  OPENAI_MAX_OUTPUT_TOKENS="${OPENAI_MAX_OUTPUT_TOKENS:-250}"
+fi
+OPENAI_DIFF_MAX_LINES="${OPENAI_DIFF_MAX_LINES:-1500}"
+OPENAI_DIFF_MAX_BYTES="${OPENAI_DIFF_MAX_BYTES:-120000}"
 
 if ! [[ "$OPENAI_MAX_OUTPUT_TOKENS" =~ ^[1-9][0-9]*$ ]]; then
   printf "❌ OPENAI_MAX_OUTPUT_TOKENS must be a positive integer (>= 1) (got: %s)\n" "$OPENAI_MAX_OUTPUT_TOKENS"
   exit 1
 fi
-# Use --fail-with-body if available; fall back to --fail for BSD/macOS curl.
-CURL_FAIL_FLAG="--fail-with-body"
-if ! curl --help all 2>/dev/null | grep -q -- '--fail-with-body'; then
-  CURL_FAIL_FLAG="--fail"
+
+if ! [[ "$OPENAI_DIFF_MAX_LINES" =~ ^[1-9][0-9]*$ ]]; then
+  printf "❌ OPENAI_DIFF_MAX_LINES must be a positive integer (>= 1) (got: %s)\n" "$OPENAI_DIFF_MAX_LINES"
+  exit 1
 fi
+
+if ! [[ "$OPENAI_DIFF_MAX_BYTES" =~ ^[1-9][0-9]*$ ]]; then
+  printf "❌ OPENAI_DIFF_MAX_BYTES must be a positive integer (>= 1) (got: %s)\n" "$OPENAI_DIFF_MAX_BYTES"
+  exit 1
+fi
+
+# Detect a locally-installed commitlint so we can validate candidate messages
+# against the exact rules the commit-msg hook enforces. When absent (non-Node
+# repo, deps not installed), fall back to the Conventional Commits regex.
+COMMITLINT_AVAILABLE="false"
+if command -v npx >/dev/null 2>&1 && npx --no-install commitlint --version >/dev/null 2>&1; then
+  COMMITLINT_AVAILABLE="true"
+fi
+
+# Returns 0 when the message passes the project's commit rules.
+commit_passes_lint() {
+  local msg="$1"
+  if [[ "$COMMITLINT_AVAILABLE" == "true" ]]; then
+    printf '%s' "$msg" | npx --no-install commitlint >/dev/null 2>&1
+    return
+  fi
+  local subject
+  subject="$(printf '%s\n' "$msg" | sed -n '1p')"
+  [[ "$subject" =~ $CONVENTIONAL_COMMIT_REGEX ]]
+}
 
 # Check current branch
 printf "🔍 Current branch:\n"
@@ -77,11 +126,12 @@ else
 fi
 printf "\n"
 
-# Get staged diff (cap by lines). Avoid materializing the full diff in memory.
+# Get staged diff with line and byte caps. Avoid sending huge prompts to the API.
 TOTAL_LINES="$(git diff --cached | wc -l | tr -d ' ')"
-DIFF="$(git diff --cached | sed -n '1,1500p')"
+DIFF="$(git diff --cached | sed -n "1,${OPENAI_DIFF_MAX_LINES}p" | head -c "$OPENAI_DIFF_MAX_BYTES" || true)"
+DIFF_BYTES="$(printf '%s' "$DIFF" | wc -c | tr -d ' ')"
 TRUNCATED="false"
-if [[ "$TOTAL_LINES" -gt 1500 ]]; then
+if [[ "$TOTAL_LINES" -gt "$OPENAI_DIFF_MAX_LINES" || "$DIFF_BYTES" -ge "$OPENAI_DIFF_MAX_BYTES" ]]; then
   TRUNCATED="true"
 fi
 
@@ -91,7 +141,7 @@ if [[ -z "$DIFF" ]]; then
 fi
 
 # Basic sensitive-pattern detection to prevent accidental data/code leakage.
-SENSITIVE_REGEX='(-----BEGIN (RSA|OPENSSH|EC|DSA)? ?PRIVATE KEY-----|AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|xox[baprs]-[0-9A-Za-z-]{10,}|gh[pousr]_[0-9A-Za-z]{20,}|github_pat_[0-9A-Za-z_]{20,}|password[[:space:]]*[:=]|api[_-]?key[[:space:]]*[:=]|secret[[:space:]]*[:=]|token[[:space:]]*[:=]|authorization[[:space:]]*[:=])'
+# SENSITIVE_REGEX comes from secret-redaction.sh (sourced above).
 if git diff --cached | sed -n '1,5000p' | grep -Eqi "$SENSITIVE_REGEX"; then
   printf "⚠️ Potential secrets detected in the staged diff.\n"
   printf "This script will send code to the OpenAI API.\n"
@@ -103,53 +153,14 @@ if git diff --cached | sed -n '1,5000p' | grep -Eqi "$SENSITIVE_REGEX"; then
 fi
 
 # Redact common secret patterns before sending to the API (best-effort).
-DIFF_REDACTED="$DIFF"
-
-# High-signal tokens/keys
-DIFF_REDACTED="$(printf '%s' "$DIFF_REDACTED" | sed -E \
-  -e 's/AKIA[0-9A-Z]{16}/[REDACTED_AWS_KEY]/g' \
-  -e 's/ASIA[0-9A-Z]{16}/[REDACTED_AWS_KEY]/g' \
-  -e 's/xox[baprs]-[0-9A-Za-z-]{10,}/[REDACTED_SLACK_TOKEN]/g' \
-  -e 's/gh[pousr]_[0-9A-Za-z]{20,}/[REDACTED_GITHUB_TOKEN]/g' \
-  -e 's/github_pat_[0-9A-Za-z_]{20,}/[REDACTED_GITHUB_TOKEN]/g' \
-)"
-
-# Private key blocks (redact the entire block)
-DIFF_REDACTED="$(printf '%s' "$DIFF_REDACTED" | awk '
-  /-----BEGIN (RSA|OPENSSH|EC|DSA)? ?PRIVATE KEY-----/ {
-    in_private_key = 1;
-    print "[REDACTED_PRIVATE_KEY_BLOCK]";
-    next;
-  }
-  in_private_key && /-----END (RSA|OPENSSH|EC|DSA)? ?PRIVATE KEY-----/ {
-    in_private_key = 0;
-    next;
-  }
-  in_private_key { next; }
-  { print; }
-' | sed -E \
-  -e 's/-----BEGIN (RSA|OPENSSH|EC|DSA)? ?PRIVATE KEY-----/[REDACTED_PRIVATE_KEY]/g' \
-  -e 's/-----END (RSA|OPENSSH|EC|DSA)? ?PRIVATE KEY-----/[REDACTED_PRIVATE_KEY_END]/g' \
-)"
-
-# Common "key/value" secrets (env/yaml/ini/json) (best-effort broad)
-DIFF_REDACTED="$(printf '%s' "$DIFF_REDACTED" | sed -E \
-  -e 's/("password"[[:space:]]*:[[:space:]]*")[^"]*"/\1[REDACTED]"/g' \
-  -e 's/("api[_-]?key"[[:space:]]*:[[:space:]]*")[^"]*"/\1[REDACTED]"/g' \
-  -e 's/("secret"[[:space:]]*:[[:space:]]*")[^"]*"/\1[REDACTED]"/g' \
-  -e 's/("token"[[:space:]]*:[[:space:]]*")[^"]*"/\1[REDACTED]"/g' \
-  -e 's/([Pp]assword[[:space:]]*[:=][[:space:]]*)[^[:space:]"'\''#]+/\1[REDACTED]/g' \
-  -e 's/(api[_-]?[Kk]ey[[:space:]]*[:=][[:space:]]*)[^[:space:]"'\''#]+/\1[REDACTED]/g' \
-  -e 's/([Ss]ecret[[:space:]]*[:=][[:space:]]*)[^[:space:]"'\''#]+/\1[REDACTED]/g' \
-  -e 's/([Tt]oken[[:space:]]*[:=][[:space:]]*)[^[:space:]"'\''#]+/\1[REDACTED]/g' \
-  -e 's/([Aa]uthorization[[:space:]]*[:=][[:space:]]*Bearer[[:space:]]+)[^[:space:]"'\''#]+/\1[REDACTED]/g' \
-)"
+# redact_sensitive_diff comes from secret-redaction.sh (sourced above).
+DIFF_REDACTED="$(redact_sensitive_diff "$DIFF")"
 
 # Preview should show redacted diff (Fix #3)
 printf "🧾 Staged diff preview (first 300 lines, redacted):\n"
 head -n 300 <<<"$DIFF_REDACTED"
 if [[ "$TRUNCATED" == "true" ]]; then
-  printf "… (diff truncated to first 1500 lines for the prompt)\n\n"
+  printf "… (diff truncated to first %s lines / %s bytes for the prompt)\n\n" "$OPENAI_DIFF_MAX_LINES" "$OPENAI_DIFF_MAX_BYTES"
 else
   printf "…\n\n"
 fi
@@ -165,9 +176,16 @@ You're an expert developer writing Conventional Commits.
 Task:
 - Suggest ONE git commit message for the staged changes.
 - Format the first line as: type(scope): description  (or type: description)
-- Allowed types: ${CONVENTIONAL_COMMIT_TYPES_CSV}
-- Keep the subject line under ~72 chars if possible.
-- If helpful, include a short body after a blank line (bullets ok).
+- Allowed types (lowercase): ${CONVENTIONAL_COMMIT_TYPES_CSV}
+- Subject rules (enforced by commitlint):
+  - type must be lowercase and from the allowed list
+  - write the description in the imperative mood ("add", not "added"/"adds")
+  - do NOT capitalize the first word of the description
+  - do NOT end the subject with a period
+  - keep the subject <= 100 chars (aim for ~72)
+- If helpful, add a body: leave ONE blank line after the subject, then wrap body
+  lines at <= 100 chars (bullets ok).
+- For a breaking change, use "type!: ..." or a "BREAKING CHANGE: ..." footer.
 - Do NOT use code fences. Do NOT wrap in quotes. Do NOT prefix with "Title:" or similar.
 
 Branch name: ${BRANCH}
@@ -188,60 +206,26 @@ max_attempts=2
 COMMIT_MSG=""
 
 while [[ $attempt -le $max_attempts ]]; do
-  PROMPT_TEXT="$(generate_prompt)"
+  PROMPT="$(generate_prompt)"
 
-  JSON_PAYLOAD="$(jq -n --arg prompt "$PROMPT_TEXT" --arg model "$OPENAI_MODEL" --argjson max_output_tokens "${OPENAI_MAX_OUTPUT_TOKENS}" '{
-    model: $model,
-    input: [
-      {
-        role: "system",
-        content: [
-          { type: "input_text", text: "You write high-quality Conventional Commit messages. Output only the commit message (subject + optional body)." }
-        ]
-      },
-      { role: "user", content: [ { type: "input_text", text: $prompt } ] }
-    ],
-    temperature: 0.4,
-    max_output_tokens: $max_output_tokens
-  }')"
-
+  # Single shared helper handles payload shaping, the request, and all the
+  # transport/non-JSON/.error guards; it returns 1 on any failure.
   set +e
-  RESPONSE="$(curl -sS "$CURL_FAIL_FLAG" https://api.openai.com/v1/responses \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d "$JSON_PAYLOAD" 2>&1)"
-curl_status=$?
-set -e
+  COMMIT_MSG="$(openai_responses_text \
+    "You write high-quality Conventional Commit messages. Output only the commit message (subject + optional body)." \
+    "$PROMPT" \
+    "$OPENAI_MAX_OUTPUT_TOKENS")"
+  request_status=$?
+  set -e
 
-  if [[ $curl_status -ne 0 ]]; then
-    printf "❌ OpenAI API request failed (curl exit code: %s).\n" "$curl_status"
-    echo "$RESPONSE" | head -c 400
-    echo
+  if [[ $request_status -ne 0 ]]; then
     exit 1
   fi
-
-  # Non-JSON guard (Fix #4)
-  if ! echo "$RESPONSE" | jq -e . >/dev/null 2>&1; then
-    printf "❌ OpenAI API returned a non-JSON response.\n"
-    echo "$RESPONSE" | head -c 400
-    echo
-    exit 1
-  fi
-
-  if echo "$RESPONSE" | jq -e '.error' >/dev/null 2>&1; then
-    errType="$(echo "$RESPONSE" | jq -r '.error.type // "unknown"')"
-    errMsg="$(echo "$RESPONSE" | jq -r '.error.message // ""' | head -c 200)"
-    printf "❌ OpenAI API error (%s): %s\n" "$errType" "$errMsg"
-    exit 1
-  fi
-
-  COMMIT_MSG="$(echo "$RESPONSE" | jq -r '
-    [(.output[]? | select(.type=="message") | .content[]? | select(.type=="output_text") | .text)] | join("")
-  ')"
 
   COMMIT_MSG="$(printf "%s" "$COMMIT_MSG" | sed -e 's/\r//g')"
   COMMIT_MSG="$(printf "%s" "$COMMIT_MSG" | sed -e 's/^Title:[[:space:]]*//I')"
   COMMIT_MSG="$(printf "%s" "$COMMIT_MSG" | sed -E 's/^['\''\"`]+//; s/['\''\"`]+$//')"
+  # shellcheck disable=SC2016  # backticks are literal (markdown fence stripping)
   COMMIT_MSG="$(printf "%s" "$COMMIT_MSG" | sed -e 's/^```[a-zA-Z0-9_-]*//; s/```$//')"
   COMMIT_MSG="$(printf "%s" "$COMMIT_MSG" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
 
@@ -250,20 +234,17 @@ set -e
     exit 1
   fi
 
-  SUBJECT_LINE="$(printf "%s\n" "$COMMIT_MSG" | sed -n '1p')"
-
-  if [[ "$SUBJECT_LINE" =~ $CONVENTIONAL_COMMIT_REGEX ]]; then
+  if commit_passes_lint "$COMMIT_MSG"; then
     break
   fi
 
   attempt=$((attempt + 1))
   if [[ $attempt -le $max_attempts ]]; then
-    printf "⚠️ Model output didn't match Conventional Commits. Retrying (%d/%d)...\n" "$attempt" "$max_attempts"
+    printf "⚠️ Model output failed commit-message validation. Retrying (%d/%d)...\n" "$attempt" "$max_attempts"
   fi
 done
 
-SUBJECT_LINE="$(printf "%s\n" "$COMMIT_MSG" | sed -n '1p')"
-if [[ ! "$SUBJECT_LINE" =~ $CONVENTIONAL_COMMIT_REGEX ]]; then
+if ! commit_passes_lint "$COMMIT_MSG"; then
   printf "⚠️ Still invalid after retries. Using a safe fallback.\n"
   COMMIT_MSG="${DEFAULT_CONVENTIONAL_COMMIT_TYPE}: update"
 fi

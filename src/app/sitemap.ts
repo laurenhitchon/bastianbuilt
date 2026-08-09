@@ -1,5 +1,5 @@
-import type { MetadataRoute } from 'next'
 import { projects } from '@/lib/projects'
+import type { MetadataRoute } from 'next'
 
 const FALLBACK_BASE_URL = 'https://www.bastian.com.au'
 

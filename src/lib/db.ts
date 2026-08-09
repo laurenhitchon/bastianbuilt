@@ -1,5 +1,5 @@
-import { neon } from "@neondatabase/serverless"
-import { drizzle } from "drizzle-orm/neon-http"
+import { neon } from '@neondatabase/serverless'
+import { drizzle } from 'drizzle-orm/neon-http'
 
 let cachedDb: ReturnType<typeof drizzle> | null = null
 
@@ -10,7 +10,7 @@ export function getDb() {
 
   const databaseUrl = process.env.DATABASE_URL
   if (!databaseUrl) {
-    throw new Error("Missing DATABASE_URL")
+    throw new Error('Missing DATABASE_URL')
   }
 
   const client = neon(databaseUrl)

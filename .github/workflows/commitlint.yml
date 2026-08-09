@@ -1,0 +1,14 @@
+# Vendored from digitalnsw/nswds-devops for this personal repository.
+# The reusable workflow is SHA-pinned below and updated through Renovate.
+# The implementation lives in that repo's reusable-commitlint.yml.
+name: Commitlint
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  commitlint:
+    uses: digitalnsw/nswds-devops/.github/workflows/reusable-commitlint.yml@a244014e317c6ab661d7c53ecd9152773b87c3be # v1

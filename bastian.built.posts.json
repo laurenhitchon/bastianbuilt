@@ -1,0 +1,164 @@
+[
+  {
+    "slug": "folded-sheet-wheel-guards",
+    "title": "Folded sheet Wheel Guards",
+    "description": "Folded sheet Wheel Guards\n\nFusion’ Sheet Metal workspace was utilised to develop the folds, mounting slots and overall geometry before producing the final flat pattern ready for laser cutting.\n\n3mm sheet aluminium will be used for the production of these pieces, with an optional logo cutout. \n\nFor more information on product @ktkustoms25",
+    "shortcode": "DbwkTq1E8GX",
+    "date": "2026-08-08",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "parts-behind-the-projects",
+    "title": "The parts behind the projects",
+    "description": "The parts behind the projects\n\nEvery model shown has been reverse engineered from physical parts or recreated from manufacturer data. Each one takes time to develop and provides an accurate visual representation, forming the foundation of larger assemblies and ensuring everything fits before fabrication.",
+    "shortcode": "Dbsbl2Mk7Op",
+    "date": "2026-08-06",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "tray-design-np300",
+    "title": "Tray Design — NP300",
+    "description": "TRAY DESIGN — NP300\n\nKyle from KT Kustoms invited me out to 3D scan this ute chassis for a client tray build he was designing and fabricating.\n\nUsing the scan, along with Kyle’s guidance and measurements, I was able to create a visual concept of what he was planning to build for the customer. This was a really fun project, both from the 3D scanning side and the design side.\n\nThe scan was done with my old Creality Ferret. It definitely was not designed for large scans like this, and my laptop at the time struggled with the amount of point cloud data, but with time and persistence we managed to get a usable scan. I’m happy with how it came out, and with my new Einstar 2 scanner, large-scale scans like this should be much simpler and higher quality moving forward.\n\nThe tray was designed around an APB canopy, APB under-tray boxes, and a Dunn & Watson slide-out trundle drawer. The rear end uses HIMOD Drakon tail lights for a modern finish.\n\nKyle did an exceptional job bringing this tray to life. Finished product posted over at @ktkustoms25",
+    "shortcode": "DZbb6b-k6F2",
+    "date": "2026-06-11",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "tray-tailboard-kt-kustoms",
+    "title": "Tray tailboard designed for KT Kustoms",
+    "description": "Tray tailboard designed for KT Kustoms. \n\nThe tailboard is designed to retrofit onto an existing tray and be laser cut from sheet aluminium, giving the rear of the tray a cleaner custom finish without requiring a full tray rebuild.\n\nThe design incorporates round Roadvision BR122ARR lights, with the tailboard shaped to suit APB undertray boxes. The corners and overall profile were designed around the existing tray setup. \n\nDXF's and drawing sheets were provided for I also supplied the \n\nDXF files and drawing sheets were supplied to KT Kustoms, allowing the aluminium cutting and folding to be completed through their chosen external fabrication workshop.",
+    "shortcode": "DZZgm3Ak2VY",
+    "date": "2026-06-10",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "einstar-2-3d-scanner",
+    "title": "New EINSTAR 2 3D scanner putting in the work",
+    "description": "New EINSTAR 2 3D scanner putting in the work. This scanner is a big upgrade from my previous Creality ferret. Both scanning and software capabilities \n\nHere’s a CBR600RR fuel pump scanned in Laser HD mode, capturing fine detail for reverse engineering, CAD, 3D printing, inspection, and replacement part modelling.\n\nIt is not just for small parts either — this scanner can also handle larger automotive jobs like Ute trays, chassis layouts, panels, brackets, and car-sized scans using its wider IR Rapid mode.\n\nFrom small motorcycle parts to large fabrication projects, a big upgrade in turning components into accurate digital models.",
+    "shortcode": "DZRwFqvEyEq",
+    "date": "2026-06-07",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "ute-tray-accessory-design-kt-kustoms",
+    "title": "Ute Tray & Accessory Design",
+    "description": "Ute Tray & Accessory Design\n\nRecent design work for KT Kustoms\n\nCustom honeycomb headboard infills featuring integrated business logos — so your brand stands out on site and on the road.\n\nWe also designed precision cutouts to suit:\n• @himod4x4 Drakon / Jimny tail lights\n• Stedi flush mount lights\n\nWhy machine-cut components?\nHigh accuracy\nReduced fabrication time\nOptimised material usage\nClean, professional finish\n\nNeed a premium fabricated custom tray built?\nGet in touch with Kyle @ktkustoms25\n\nWant custom tray design + cutting plans?\nReach out.\n\nImage Breakdown:\nPics 1, 2 – Custom honeycomb headboard infill with logo + tail light cutouts\n\nPics 3 & 4 – Honeycomb infill designed to retrofit an existing headboard + custom rear section with truck-style tail light cutouts and twin exhaust ports\n\nPic 5 - fully welded tray by @ktkustoms25 featuring the headboard infills and light cutouts.\n\nNote - Both tray frames/bodies were designed by Kyle from Kt Kustoms",
+    "shortcode": "DUxqybukrQz",
+    "date": "2026-02-15",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "yzf-r7-pod-filter-airbox",
+    "title": "YZF-R7 Pod filter Airbox",
+    "description": "YZF-R7 Pod filter Airbox\n\nScanned. Designed. Printed. Fitted.\n\nThis custom R7 airbox started with a full 3D scan of the intake area to capture every mounting point and clearance. I then created a replica model of the DNA pod filter so the fit would be spot on from the start.\n\nThe entire airbox was designed in Fusion 360 around the scan data to dial in structure, and fitment.\n\nPrinted in multiple materials for the right balance of strength and flexibility:\n• ASA-CF for a rigid, heat-resistant, high-strength airbox shell\n• TPU for the flexible joiners that clamp securely to the filter and intake\n\nFinished with brass inserts, a serviceable lid, and a hex rear vent for airflow. Clean on the bike. Functional by design.",
+    "shortcode": "DUuIP8kkjld",
+    "date": "2026-02-14",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "cbr600rr-engine-case-cover",
+    "title": "CBR600RR Engine Case Cover",
+    "description": "CBR600RR Engine Case Cover\n\nThe engine case covers were designed using a 3D scan of the OEM engine case as a dimensional reference, ensuring accurate clearances and perfect fitment before fabrication.\n\nThe cover was designed using surface modelling techniques rather than traditional solid modelling; this method produced complex geometry faster and cut model production time in half. (compared to similar previous projects)\n\nThe final product is a 4 mm thick wall, solid-infill Engine cover, 3D printed in Carbon Fibre-reinforced nylon; chosen for its strength, heat resistance, low friction, and abrasion resistance — ideal for sacrificial protection in high-impact areas.",
+    "shortcode": "DTLKzXdElNB",
+    "date": "2026-01-06",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "cbr600rr-gp-style-front-fender-prototype",
+    "title": "CBR600RR GP style Front fender Prototype",
+    "description": "CBR600RR GP style Front fender Prototype\n\nThis design draws heavily from Moto2 aero, especially the Kalex front fender profile. Compared to the OEM hugger, this GP style reduces frontal drag and shields the fork tubes more effectively.\n\nIt also pushed me to learn Fusion 360’s surface modeling tools—something I’d barely touched before this. Complex curves like these are where surface techniques really shine. \n\nIm very happy with how this design came together, and very excited to bring this to life using 3d printing on my H2D",
+    "shortcode": "DRvVpUMElAw",
+    "date": "2025-12-01",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "1780-x-2000-mm-tray-ln106-single-cab-beta-design",
+    "title": "1780 × 2000 mm Tray — LN106 Single Cab (Beta Design)",
+    "description": "1780 × 2000 mm Tray — LN106 Single Cab (Beta Design)\n\nI designed this custom tray for a single-cab LN106.\n\nThe tray is built to accommodate APB canopy and under-tray boxes, with integrated mounts for JB74 tail lights and Stedi C4 reverse/flood lights recessed into the rear for a clean, functional look.\n\nThe CAD model includes animated moving components, such as opening canopy doors and modular mounting points for accessories, allowing for motion testing and visualizing functionality.\n\nThis design is currently in the early development stage, with further refinement planned for structure and detailing. I also have plans to 3D scan the rear cab and chassis to precisely incorporate chassis mounting points and show how the tray will fit and function in a full vehicle setup.",
+    "shortcode": "DQfrRN9kmBG",
+    "date": "2025-11-01",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "engine-covers-cbr600-f2-f3",
+    "title": "Engine covers - cbr600 f2/f3 🏍",
+    "description": "Engine covers - cbr600 f2/f3 🏍\n\nI was asked to design and produce a set of engine covers for a rider competing in the Pre-Modern motorcycle racing class.\n\nReplacement covers for earlier model bikes like the CBR600 F2/F3 are extremely hard to find, so I set out to create a Custom, functional alternative.\n\nUsing my Creality 3D scanner, I first captured accurate scans of the original engine cases. These were then imported into Fusion 360, where I modelled and refined the covers. It took multiple iterations and fitment test prints to achieve the final design.\n\nThe finished parts are printed in PA-CF — a carbon fibre-infused nylon chosen for its high strength, heat resistance, and low friction properties. This material makes the covers highly abrasion-resistant and perfectly suited to the demanding environment near the engine.",
+    "shortcode": "DQeBBK1EjCQ",
+    "date": "2025-10-31",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "want-the-coolest-bin-on-the-block",
+    "title": "Want the coolest bin on the block?",
+    "description": "Want the coolest bin on the block? \n\n'BINRIMS' - Any style, any colour\n\nI designed and modelled a set of multi-piece rims for a standard wheelie bin — inspired by popular car wheel designs, so your bin can finally match your car.\n\nThe rims are fully 3D printed and designed as a multi-piece assembly, just like real automotive wheels, with accurate proportions and realistic detailing.\n\nNothing says dedication like matching rims with your rubbish.\n\nComing soon to Bastian.com.au",
+    "shortcode": "DQd8fe0EpMv",
+    "date": "2025-10-31",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "subwoofer-box-fg-falcon-ute",
+    "title": "Subwoofer box - FG falcon Ute",
+    "description": "Subwoofer box - FG falcon Ute\n\nOne of my first projects after buying my 3D scanner was designing a custom subwoofer enclosure for my 2013 FG Ute.\n\nWhile off-the-shelf sub boxes exist, finding one that fits perfectly behind the seats is nearly impossible due to the limited space.\n\nUsing my Creality 3D scanner, I captured a full-width scan of the rear cabin to model the area accurately. After researching the volume and spacing requirements for proper subwoofer performance, I developed two enclosure designs — a dual 10” and a dual 8” setup.\n\nI’m really happy with how both turned out, and especially with how well I managed to get the 3D scanner dialed in for such a complex space.",
+    "shortcode": "DQd6DSlkuXV",
+    "date": "2025-10-31",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "wheelchair-footrest-replacement",
+    "title": "Wheelchair footrest replacement",
+    "description": "Wheelchair footrest replacement\n\nTo create an exact 1:1 replacement, I used the intact footrest from the opposite side as a reference. With the help of rulers and vernier calipers, I was able to model a precise replica — now redesigned to be even stronger than the original.\n\nFor the print, I chose ASA-CF — a carbon fibre–infused, UV-resistant engineering plastic that offers excellent strength and durability, making it ideal for load-bearing applications like this.\n\n(Aspire Evoke 2 wheelchair footrest)",
+    "shortcode": "DQd4UQREoit",
+    "date": "2025-10-31",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "mid-century-home-1-64-scale-model",
+    "title": "Using the original architectural plans along with reference photos of",
+    "description": "Using the original architectural plans along with reference photos of modifications made after construction, I recreated this mid-century home as a 1:64 scale model — designed as a decorative centrepiece.\n\nThe model was designed in Fusion 360 and printed in six pieces on my Bambu Labs P1P.\n\nIt’s made from PLA, an environmentally friendly plastic, providing a clean finish that captures the home’s architectural details while keeping the build sustainable.",
+    "shortcode": "DQdbu_lEo3v",
+    "date": "2025-10-31",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "axle-sliders",
+    "title": "Axle Sliders",
+    "description": "Axle Sliders\nThese sliders are 3D printed from carbon fibre–infused nylon.\n\nWhy nylon? It has a low coefficient of friction and a high melting point, meaning it slides rather than grips on contact — ideal for minimizing damage during an impact. Its slight flexibility also helps absorb shocks, making it perfect for impact-prone parts like axle sliders.\n\nThe carbon fibre reinforcement increases stiffness and binds the nylon’s layers, helping prevent splitting or cracking under heavy stress.\n\n⚠️ Downside: CF-nylon is expensive — around 5–6× the cost of standard filament — but the performance and durability make it worth it for functional applications.\n\nHandlebar Quad Lock Mount:\nI designed this mount to hold Quad Lock’s charger securely on the handlebars. It’s a two-piece design that slides together and clamps with a bolt and nyloc nut for consistent pressure.\n\nIf I were to revisit this design today, I’d:\n\nIntegrate a TPU layer (rubber-like material) to improve grip on the metal handlebar.\n\nAdd nutserts for easier installation and a cleaner, more refined finish.\n\nEven so, this mount has held up flawlessly for over 12 months, proving the design’s reliability.",
+    "shortcode": "DQdZ38nEs2a",
+    "date": "2025-10-31",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "97-hilux-extra-cab-rn110r-tray-build",
+    "title": "’97 Hilux Extra Cab (RN110R) – Tray Build",
+    "description": "’97 Hilux Extra Cab (RN110R) – Tray Build\n\nThis was the first tray I ever designed and built — completed in November 2023. I created it using a combination of measurements and reference photos to achieve the right proportions and fitment.\n\nIt was my first real dive into welding and fabrication, and the project came with plenty of challenges — but also a ton of learning. From material selection to structural rigidity, every step taught me something new about building functional components from scratch.\n\nLooking back now, there are many things I’d do differently. If I were to design another tray today, I’d start by using 3D scanning to eliminate guesswork during the design and fitment stages. This would streamline the process and allow me to have everything precisely mapped out digitally before even purchasing materials.\n\nI’d also incorporate CNC-cut pieces, not only to speed up fabrication but to improve accuracy and repeatability — making it easier to reproduce identical parts or adjust the design for different vehicles. Cutting and shaping the metal manually was by far the most time-consuming (and least consistent) part of the original build.\n\nOverall, this project marked a turning point — where I combined my interest in design, engineering, and fabrication into something tangible.",
+    "shortcode": "DQdSgWvEvXz",
+    "date": "2025-10-31",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  },
+  {
+    "slug": "n50-hilux-toyota-grill-badge",
+    "title": "N50 Hilux TOYOTA grill badge",
+    "description": "N50 Hilux TOYOTA grill badge \n\nThis was my first 3D print project when I started exploring custom car parts three years ago.\n\nAt the time, I didn’t even own a printer — I had the badge printed by a guy I found on Marketplace. But not long after, I bought my first machine: a Bambu P1P.\n\nTwo years later, in mid-2025, I revisited the project (even though I’d already sold the car it was originally made for). I completely redesigned the badge from scratch into a cleaner, more functional three-piece setup: adapter, base, and lettering.\n\nThe parts are assembled with nutserts, screws, and glue, eliminating the need for supports and cutting production time. I also replaced the hand-painted lettering with solid white plastic, making it more durable — no more fading or scratches.\n\nProud of how far this project (and my skills) have come since",
+    "shortcode": "DQYyxZMkizD",
+    "date": "2025-10-29",
+    "status": "locked",
+    "note": "Curated in src/lib/projects.ts; media in public/ left untouched."
+  }
+]

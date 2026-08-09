@@ -1,46 +1,15 @@
-# .github/workflows/validate-branch-name.yml
+# Vendored from digitalnsw/nswds-devops for this personal repository.
+# The reusable workflow is SHA-pinned below and updated through Renovate.
+# The implementation lives in that repo's reusable-validate-branch-name.yml.
 name: Validate Branch Name
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, edited, reopened]
 
 permissions:
   contents: read
 
 jobs:
   check-branch-name:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout base branch policy
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.sha }}
-          fetch-depth: 1
-          path: .base-policy
-
-      - name: Check branch name
-        shell: bash
-        run: |
-          POLICY_PATH="${GITHUB_WORKSPACE}/.base-policy/branch-name-config.sh"
-
-          if [[ -f "$POLICY_PATH" ]]; then
-            # Source policy from the PR base commit so PR changes cannot alter validation.
-            # shellcheck source=/dev/null
-            source "$POLICY_PATH"
-          else
-            echo "Branch policy config not found in base commit; using legacy branch-name policy."
-            BRANCH_TYPES_REGEX='feature|bugfix|hotfix|release|docs|build|test|refactor|chore'
-            BRANCH_REGEX="^(${BRANCH_TYPES_REGEX})(/(issue|ticket)/[A-Za-z0-9_-]+)?/[a-z0-9-]+$"
-            SNYK_REGEX='^snyk-upgrade-[0-9a-f]{32}$'
-          fi
-
-          BRANCH_NAME="${{ github.head_ref }}"
-          echo "Branch name: $BRANCH_NAME"
-
-          if [[ ! "$BRANCH_NAME" =~ $BRANCH_REGEX && ! "$BRANCH_NAME" =~ $SNYK_REGEX ]]; then
-            echo "❌ Branch name '$BRANCH_NAME' does not follow naming convention."
-            exit 1
-          fi
-
-          echo "✅ Branch name '$BRANCH_NAME' follows naming convention."
+    uses: digitalnsw/nswds-devops/.github/workflows/reusable-validate-branch-name.yml@a244014e317c6ab661d7c53ecd9152773b87c3be # v1
