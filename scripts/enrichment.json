@@ -1,0 +1,257 @@
+{
+  "DZRwFqvEyEq": {
+    "title": "Fuel Pump 3D Scan — Honda CBR600RR",
+    "description": "Honda CBR600RR fuel pump assembly captured on an Einstar 2 in Laser HD mode, producing a detailed mesh for reverse engineering and replacement part modelling.",
+    "overview": "The fuel pump assembly from a Honda CBR600RR was digitised to provide accurate reference geometry for reverse engineering and replacement part design. The complete assembly was mounted on a marker turntable and scanned with an Einstar 2 handheld scanner in Laser HD mode, chosen for its ability to resolve the small ports, connectors, and mounting flange detail on a part with mixed surface finishes. Scan data was processed in EinStar Hub, with mesh optimisation and curvature-based hole filling applied to close gaps left by occluded areas. The result is a clean, watertight mesh ready to model against in CAD.",
+    "tags": [
+      "3D Scanning",
+      "Einstar 2",
+      "Honda CBR600RR",
+      "Reverse Engineering"
+    ],
+    "features": [
+      "Full fuel pump assembly captured as a single continuous mesh",
+      "Laser HD mode selected for fine port and connector detail",
+      "Marker turntable used for stable tracking through full rotations",
+      "Curvature-based hole filling applied to occluded internal areas",
+      "Mesh prepared as CAD reference for replacement part modelling"
+    ],
+    "process": [
+      "Mount the fuel pump assembly on a marker turntable",
+      "Set the Einstar 2 to Laser HD scan mode",
+      "Capture the assembly across multiple orientations",
+      "Align and merge scan passes into a single mesh",
+      "Run mesh optimisation and smoothing in EinStar Hub",
+      "Apply curvature hole filling and export the finished mesh"
+    ],
+    "specs": [
+      {
+        "label": "Scanner",
+        "value": "Einstar 2 (Shining 3D)"
+      },
+      {
+        "label": "Scan Method",
+        "value": "Laser HD mode, marker turntable"
+      },
+      {
+        "label": "Software",
+        "value": "EinStar Hub"
+      },
+      {
+        "label": "Subject",
+        "value": "Honda CBR600RR fuel pump assembly"
+      },
+      {
+        "label": "Output",
+        "value": "Cleaned mesh for reverse engineering"
+      }
+    ],
+    "model": "anthropic/claude-opus-5",
+    "generated_at": "2026-08-09T03:18:50Z",
+    "image_count": 1
+  },
+  "DZZgm3Ak2VY": {
+    "title": "Bolt-On Tray Tailboard — KT Kustoms",
+    "description": "Retrofit rear tailboard for a ute tray, drawn for laser cutting and folding in sheet aluminium, carrying six 122.5 mm round lights and bolting over the existing tray.",
+    "overview": "A retrofit rear tailboard designed to fit over an existing ute tray without modifying it, so the lighting upgrade could be bolted on rather than fabricated in place. The assembly is broken into three sheet aluminium pieces, each detailed as a flat pattern with fold lines and bend radii ready for laser cutting and folding. Six 122.5 mm round light cutouts sit in two clusters either side of a recessed centre panel carrying the KT Kustoms badge. Folded return brackets with 6.88 mm hole patterns handle the bolt-on mounting to the tray.",
+    "tags": [
+      "Sheet Metal",
+      "Laser Cutting",
+      "Aluminium",
+      "Ute Tray"
+    ],
+    "features": [
+      "Bolt-on design fits over an existing tray with no cutting",
+      "Six 122.5 mm round light cutouts in two clusters",
+      "Recessed centre panel framing the KT Kustoms badge",
+      "Angled tail ends with 47.5 degree folds for a tapered profile",
+      "Folded mounting brackets with pre-drilled 6.88 mm bolt holes"
+    ],
+    "process": [
+      "Establish tray dimensions and light diameter as design constraints",
+      "Model the tailboard assembly around the six-light layout",
+      "Split the design into three separate sheet metal pieces",
+      "Position light cutouts, badge recess and bracket hole patterns",
+      "Unfold each piece to a flat pattern with bend lines and radii called out",
+      "Issue dimensioned drawings across three sheets for laser cutting and folding"
+    ],
+    "specs": [
+      {
+        "label": "Material",
+        "value": "Sheet aluminium"
+      },
+      {
+        "label": "Fabrication",
+        "value": "Laser cut and folded"
+      },
+      {
+        "label": "Components Modelled",
+        "value": "3 pieces (PC1, PC2, PC3 x2)"
+      },
+      {
+        "label": "Dimensions",
+        "value": "PC2 flat length 1929.57 mm, height 314.57 mm"
+      },
+      {
+        "label": "Lighting",
+        "value": "6 x 122.5 mm round lights"
+      },
+      {
+        "label": "Fastening",
+        "value": "Bolt-on brackets, 6.88 mm holes, 60 degree folded returns"
+      }
+    ],
+    "model": "anthropic/claude-opus-5",
+    "generated_at": "2026-08-09T03:18:36Z",
+    "image_count": 5
+  },
+  "DZbb6b-k6F2": {
+    "title": "Tray Design — NP300",
+    "description": "Visual design concept for a custom Nissan NP300 ute tray, modelled from a full chassis scan and laid out around off-the-shelf canopy, box and drawer hardware.",
+    "overview": "A visual design concept for a custom ute tray on a Nissan NP300, developed so the layout could be assessed before any steel was cut. A full chassis scan provided the mounting geometry the tray had to sit on, and the tray, canopy, underbody boxes and rear slide-out drawer were laid out around off-the-shelf hardware rather than bespoke fittings. Renders cover the tray open and closed, with a checkerplate rear bar carrying combination tail lights, work lights, a number plate mount and mudflaps, giving the client a clear view of the finished configuration.",
+    "tags": [
+      "Fusion 360",
+      "Ute Tray",
+      "NP300",
+      "3D Scan"
+    ],
+    "features": [
+      "Tray and canopy laid out around off-the-shelf hardware",
+      "Full-width rear slide-out drawer under the tray floor",
+      "Gullwing canopy doors with rear-hinged access panel",
+      "Underbody toolbox with T-handle latch integrated into the tray sides",
+      "Checkerplate rear bar with combination tail lights, work lights and plate mount"
+    ],
+    "process": [
+      "Full 3D scan of the NP300 chassis and rear end",
+      "Scan data cleanup and alignment for use as modelling reference",
+      "Tray floor and subframe laid out over the chassis rails",
+      "Canopy, underbody boxes and rear drawer positioned around stock hardware sizes",
+      "Rear bar, lighting and mudflap mounts modelled in",
+      "Rendered open and closed for client review of the configuration"
+    ],
+    "specs": [
+      {
+        "label": "Software",
+        "value": "Fusion 360"
+      },
+      {
+        "label": "Scan Method",
+        "value": "Full chassis 3D scan"
+      },
+      {
+        "label": "Vehicle",
+        "value": "Nissan NP300"
+      },
+      {
+        "label": "Components Modelled",
+        "value": "Tray, canopy, underbody boxes, rear slide-out drawer, rear bar"
+      },
+      {
+        "label": "Output",
+        "value": "Visual design concept renders"
+      }
+    ],
+    "model": "anthropic/claude-opus-5",
+    "generated_at": "2026-08-09T03:18:19Z",
+    "image_count": 3
+  },
+  "Dbsbl2Mk7Op": {
+    "title": "Reverse-Engineered CAD Component Library",
+    "description": "A working library of reusable CAD models — LED lights, canopies, wheel guards, rims, filters and hardware — built from physical parts and manufacturer data for use inside larger assemblies.",
+    "overview": "Designing trays, canopies and vehicle fitments accurately requires the bought-in parts to exist as models first. This library was built up part by part, each item either measured from the physical component or reconstructed from manufacturer data, then modelled to the level of detail needed for assembly work. Coverage includes Stedi and Roadvision lighting, APB canopy and wheel guard profiles, air circulation vents, a CBR600RR radiator, DNA pod filter, Motocell lithium battery, an 18\" 114.3x5 Falcon rim and switch hardware. Every model drops straight into a larger assembly with correct mounting points and clearances.",
+    "tags": [
+      "CAD Library",
+      "Reverse Engineering",
+      "Component Modelling",
+      "Vehicle Fitout"
+    ],
+    "features": [
+      "Models sourced from physical parts or manufacturer data, not approximations",
+      "Mounting points and fastener locations modelled for real assembly use",
+      "Lighting range covers Stedi and Roadvision flood, reverse and tail units",
+      "APB 800mm canopy and 600 series wheel guard profiles included",
+      "Detail level kept appropriate to assembly checking rather than visual rendering"
+    ],
+    "process": [
+      "Identify components used repeatedly across tray, canopy and bike projects",
+      "Measure physical parts or gather manufacturer dimensional data",
+      "Model each component with accurate mounting and clearance geometry",
+      "Verify critical dimensions against the real part where available",
+      "Catalogue models with part names and model codes for retrieval",
+      "Insert into larger assemblies to confirm fit and packaging"
+    ],
+    "specs": [
+      {
+        "label": "Reference Method",
+        "value": "Physical part measurement and manufacturer data"
+      },
+      {
+        "label": "Components Modelled",
+        "value": "LED lighting, canopy, wheel guards, vents, rim, radiator, pod filter, battery, switches, handlebar and grips"
+      },
+      {
+        "label": "Use Case",
+        "value": "Drop-in components for tray, canopy and motorcycle assemblies"
+      }
+    ],
+    "model": "anthropic/claude-opus-5",
+    "generated_at": "2026-08-09T03:18:05Z",
+    "image_count": 2
+  },
+  "DbwkTq1E8GX": {
+    "title": "Folded Sheet Aluminium Wheel Guards — KT Kustoms",
+    "description": "Folded 3mm aluminium wheel guards modelled in the Fusion 360 sheet metal workspace, flat-patterned for laser cutting with the KT Kustoms logo cut through the top face.",
+    "overview": "A pair of trailer wheel guards developed for KT Kustoms as a laser-cut and folded sheet metal part, so the entire form had to unfold cleanly to a single flat blank. The guards were modelled in the Fusion 360 sheet metal workspace, with a 600 mm top face, 120 degree shoulder bends and 290 mm and 410 mm legs, plus tapered corner reliefs at each fold line. Four slots in the top face allow mounting adjustment, and the KT Kustoms logo is cut straight through the crown. The flat pattern was released as a folding drawing in 3mm aluminium, with a polished variant and a plain no-logo version.",
+    "tags": [
+      "Sheet Metal",
+      "Fusion 360",
+      "Aluminium",
+      "Laser Cutting"
+    ],
+    "features": [
+      "3mm aluminium sheet folded from a single flat blank",
+      "KT Kustoms logo cut through the top face",
+      "Four slotted holes for adjustable mounting positions",
+      "120 degree shoulder bends with 290 mm and 410 mm legs",
+      "Offered as a logo version and a plain no-logo version"
+    ],
+    "process": [
+      "Establish guard width, height and coverage requirements",
+      "Model the guard in the Fusion 360 sheet metal workspace",
+      "Set bend angles and R3 radii for each fold line",
+      "Add mounting slots and the cut-through logo to the top face",
+      "Unfold to a flat pattern and check corner reliefs",
+      "Issue folding drawings and flat pattern for laser cutting"
+    ],
+    "specs": [
+      {
+        "label": "Material",
+        "value": "3mm aluminium sheet"
+      },
+      {
+        "label": "Software",
+        "value": "Fusion 360 sheet metal workspace"
+      },
+      {
+        "label": "Fabrication",
+        "value": "Laser cut flat blank, press folded"
+      },
+      {
+        "label": "Dimensions",
+        "value": "600 mm top face, 290 mm and 410 mm legs"
+      },
+      {
+        "label": "Bends",
+        "value": "120 degree shoulders, R3 bend radius"
+      },
+      {
+        "label": "Finish",
+        "value": "Polished"
+      }
+    ],
+    "model": "anthropic/claude-opus-5",
+    "generated_at": "2026-08-09T03:17:45Z",
+    "image_count": 5
+  }
+}

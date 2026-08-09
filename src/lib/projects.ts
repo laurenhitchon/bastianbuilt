@@ -18,6 +18,203 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'folded-sheet-wheel-guards',
+    title: 'Folded Sheet Aluminium Wheel Guards — KT Kustoms',
+    description:
+      'Folded 3mm aluminium wheel guards modelled in the Fusion 360 sheet metal workspace, flat-patterned for laser cutting with the KT Kustoms logo cut through the top face.',
+    image: '/folded-sheet-wheel-guards/DbwkTq1E8GX_1.jpg',
+    tags: ['Sheet Metal', 'Fusion 360', 'Aluminium', 'Wheel Guards'],
+    overview:
+      'A pair of trailer wheel guards developed for KT Kustoms as a laser-cut and folded sheet metal part, so the entire form had to unfold cleanly to a single flat blank. The guards were modelled in the Fusion 360 sheet metal workspace, with a 600 mm top face, 120 degree shoulder bends and 290 mm and 410 mm legs, plus tapered corner reliefs at each fold line. Four slots in the top face allow mounting adjustment, and the KT Kustoms logo is cut straight through the crown. The flat pattern was released as a folding drawing in 3mm aluminium, with a polished variant and a plain no-logo version.',
+    features: [
+      'Designed in Fusion 360 sheet metal workspace with correct bend allowances',
+      '3mm aluminium sheet specified for the production run',
+      'Slotted mounting holes allow adjustment across mounting positions',
+      'Optional KT Kustoms logo cutout as a variant of the flat pattern',
+      'Tapered side skirts formed by 45 and 60 degree folds',
+    ],
+    specs: [
+      { label: 'Material', value: '3mm aluminium sheet' },
+      { label: 'Software', value: 'Fusion 360 sheet metal workspace' },
+      { label: 'Fabrication', value: 'Laser cut flat blank, press folded' },
+      { label: 'Dimensions', value: '600 mm top face, 290 mm and 410 mm legs' },
+      { label: 'Bends', value: '120 degree shoulders, R3 bend radius' },
+      { label: 'Finish', value: 'Polished' },
+    ],
+    process: [
+      'Set out overall guard geometry and coverage requirements',
+      'Model the guard in Fusion 360 sheet metal workspace',
+      'Define bend angles and R3 radii across the fold lines',
+      'Position mounting slots and optional logo cutout',
+      'Flatten to a production flat pattern for laser cutting',
+      'Produce dimensioned drawings and folding sheet for fabrication',
+    ],
+    gallery: [
+      '/folded-sheet-wheel-guards/DbwkTq1E8GX_1.jpg',
+      '/folded-sheet-wheel-guards/DbwkTq1E8GX_2.jpg',
+      '/folded-sheet-wheel-guards/DbwkTq1E8GX_3.jpg',
+      '/folded-sheet-wheel-guards/DbwkTq1E8GX_4.jpg',
+      '/folded-sheet-wheel-guards/DbwkTq1E8GX_5.jpg',
+    ],
+  }, // DbwkTq1E8GX · 2026-08-08 · Carousel — 5 images
+
+  {
+    slug: 'parts-behind-the-projects',
+    title: 'Reverse-Engineered CAD Component Library',
+    description:
+      'A working library of reusable CAD models — LED lights, canopies, wheel guards, rims, filters and hardware — built from physical parts and manufacturer data for use inside larger assemblies.',
+    image: '/parts-behind-the-projects/Dbsbl2Mk7Op_1.jpg',
+    tags: ['Fusion 360', 'Reverse Engineering', 'CAD Library', 'Component Models'],
+    overview:
+      'Designing trays, canopies and vehicle fitments accurately requires the bought-in parts to exist as models first. This library was built up part by part, each item either measured from the physical component or reconstructed from manufacturer data, then modelled to the level of detail needed for assembly work. Coverage includes Stedi and Roadvision lighting, APB canopy and wheel guard profiles, air circulation vents, a CBR600RR radiator, DNA pod filter, Motocell lithium battery, an 18" 114.3x5 Falcon rim and switch hardware. Every model drops straight into a larger assembly with correct mounting points and clearances.',
+    features: [
+      'Library of reference models built from physical parts and manufacturer data',
+      'Covers LED lighting, canopy panels, wheels, filters and hardware',
+      'Accurate external geometry for clearance and mounting checks in assemblies',
+      'Mounting holes and fixing points modelled for real fastener placement',
+      'Reusable across ute tray, canopy and motorcycle build files',
+    ],
+    specs: [
+      { label: 'Reference Method', value: 'Physical part measurement and manufacturer data' },
+      {
+        label: 'Components Modelled',
+        value:
+          'LED lighting, canopy, wheel guards, vents, rim, radiator, pod filter, battery, switches, handlebar and grips',
+      },
+      { label: 'Use Case', value: 'Drop-in components for tray, canopy and motorcycle assemblies' },
+    ],
+    process: [
+      'Collect physical parts or manufacturer drawings and dimensional data',
+      'Measure or scan key features and mounting interfaces',
+      'Model each component in Fusion 360 to matching outer geometry',
+      'Add fixing points, connectors and cutout detail where relevant',
+      'Apply appearances so parts read correctly in assembly renders',
+      'Insert into larger assemblies to confirm fit before fabrication',
+    ],
+    gallery: [
+      '/parts-behind-the-projects/Dbsbl2Mk7Op_1.jpg',
+      '/parts-behind-the-projects/Dbsbl2Mk7Op_2.jpg',
+    ],
+  }, // Dbsbl2Mk7Op · 2026-08-06 · Carousel — 2 images
+
+  {
+    slug: 'tray-design-np300',
+    title: 'Tray Design — NP300',
+    description:
+      'Visual design concept for a custom Nissan NP300 ute tray, modelled from a full chassis scan and laid out around off-the-shelf canopy, box and drawer hardware.',
+    image: '/tray-design-np300/DZbb6b-k6F2_1.jpg',
+    tags: ['3D Scanning', 'Nissan NP300', 'Ute Tray', 'Concept Design'],
+    overview:
+      'A visual design concept for a custom ute tray on a Nissan NP300, developed so the layout could be assessed before any steel was cut. A full chassis scan provided the mounting geometry the tray had to sit on, and the tray, canopy, underbody boxes and rear slide-out drawer were laid out around off-the-shelf hardware rather than bespoke fittings. Renders cover the tray open and closed, with a checkerplate rear bar carrying combination tail lights, work lights, a number plate mount and mudflaps, giving the client a clear view of the finished configuration.',
+    features: [
+      'Tray modelled directly onto scan data of the NP300 chassis',
+      'Packaged around an APB canopy and APB under-tray boxes',
+      'Dunn & Watson slide-out trundle drawer built into the tray floor',
+      'Rear bar carries HIMOD Drakon tail lights and plate mount',
+      'Concept renders produced for the client before fabrication began',
+    ],
+    specs: [
+      { label: 'Software', value: 'Fusion 360' },
+      { label: 'Scan Method', value: 'Full chassis 3D scan' },
+      { label: 'Vehicle', value: 'Nissan NP300' },
+      {
+        label: 'Components Modelled',
+        value: 'Tray, canopy, underbody boxes, rear slide-out drawer, rear bar',
+      },
+      { label: 'Output', value: 'Visual design concept renders' },
+    ],
+    process: [
+      'Attend site with KT Kustoms to 3D scan the NP300 chassis',
+      'Capture the full chassis with a Creality Ferret handheld scanner',
+      'Manage and clean the large point cloud data set for modelling use',
+      "Combine scan geometry with Kyle's measurements and build notes",
+      'Model the tray, canopy, under-tray boxes and trundle drawer in CAD',
+      'Render the concept for client sign-off ahead of fabrication',
+    ],
+    gallery: [
+      '/tray-design-np300/DZbb6b-k6F2_1.jpg',
+      '/tray-design-np300/DZbb6b-k6F2_2.mp4',
+      '/tray-design-np300/DZbb6b-k6F2_3.jpg',
+      '/tray-design-np300/DZbb6b-k6F2_4.jpg',
+    ],
+  }, // DZbb6b-k6F2 · 2026-06-11 · Carousel — 3 images, 1 video
+
+  {
+    slug: 'tray-tailboard-kt-kustoms',
+    title: 'Bolt-On Tray Tailboard — KT Kustoms',
+    description:
+      'Retrofit rear tailboard for a ute tray, drawn for laser cutting and folding in sheet aluminium, carrying six 122.5 mm round lights and bolting over the existing tray.',
+    image: '/tray-tailboard-kt-kustoms/DZZgm3Ak2VY_1.jpg',
+    tags: ['Sheet Metal', 'Laser Cutting', 'Ute Tray', 'KT Kustoms'],
+    overview:
+      'A retrofit rear tailboard designed to fit over an existing ute tray without modifying it, so the lighting upgrade could be bolted on rather than fabricated in place. The assembly is broken into three sheet aluminium pieces, each detailed as a flat pattern with fold lines and bend radii ready for laser cutting and folding. Six 122.5 mm round light cutouts sit in two clusters either side of a recessed centre panel carrying the KT Kustoms badge. Folded return brackets with 6.88 mm hole patterns handle the bolt-on mounting to the tray.',
+    features: [
+      'Bolt-on retrofit to an existing tray, no full rebuild required',
+      'Six Ø122.5 mm cutouts sized for Roadvision BR122ARR round lights',
+      'Rear profile shaped to clear APB undertray boxes',
+      'Corner angles matched to the existing tray geometry',
+      'Three-piece folded construction with separate bolt-on mounting strips',
+    ],
+    specs: [
+      { label: 'Material', value: 'Sheet aluminium' },
+      { label: 'Fabrication', value: 'Laser cut and folded' },
+      { label: 'Components Modelled', value: '3 pieces (PC1, PC2, PC3 x2)' },
+      { label: 'Dimensions', value: 'PC2 flat length 1929.57 mm, height 314.57 mm' },
+      { label: 'Lighting', value: '6 x 122.5 mm round lights' },
+      { label: 'Fastening', value: 'Bolt-on brackets, 6.88 mm holes, 60 degree folded returns' },
+    ],
+    process: [
+      'Gather dimensions from the existing tray, corners and undertray boxes',
+      'Model the tailboard in CAD around the confirmed tray geometry',
+      'Set light cutout diameter and spacing to suit the Roadvision units',
+      'Split the design into three sheet pieces with defined bend lines',
+      'Produce flat patterns, DXF files and dimensioned drawing sheets',
+      'Supply files to KT Kustoms for external laser cutting and folding',
+    ],
+    gallery: [
+      '/tray-tailboard-kt-kustoms/DZZgm3Ak2VY_1.jpg',
+      '/tray-tailboard-kt-kustoms/DZZgm3Ak2VY_2.jpg',
+      '/tray-tailboard-kt-kustoms/DZZgm3Ak2VY_3.mp4',
+      '/tray-tailboard-kt-kustoms/DZZgm3Ak2VY_4.jpg',
+      '/tray-tailboard-kt-kustoms/DZZgm3Ak2VY_5.jpg',
+      '/tray-tailboard-kt-kustoms/DZZgm3Ak2VY_6.jpg',
+    ],
+  }, // DZZgm3Ak2VY · 2026-06-10 · Carousel — 5 images, 1 video
+
+  {
+    slug: 'einstar-2-3d-scanner',
+    title: 'Fuel Pump 3D Scan — Honda CBR600RR',
+    description:
+      'Honda CBR600RR fuel pump assembly captured on an Einstar 2 in Laser HD mode, producing a detailed mesh for reverse engineering and replacement part modelling.',
+    image: '/einstar-2-3d-scanner/DZRwFqvEyEq_1.jpg',
+    tags: ['3D Scanning', 'EinStar 2', 'Honda CBR600RR', 'Reverse Engineering'],
+    overview:
+      'The fuel pump assembly from a Honda CBR600RR was digitised to provide accurate reference geometry for reverse engineering and replacement part design. The complete assembly was mounted on a marker turntable and scanned with an Einstar 2 handheld scanner in Laser HD mode, chosen for its ability to resolve the small ports, connectors, and mounting flange detail on a part with mixed surface finishes. Scan data was processed in EinStar Hub, with mesh optimisation and curvature-based hole filling applied to close gaps left by occluded areas. The result is a clean, watertight mesh ready to model against in CAD.',
+    features: [
+      'Honda CBR600RR fuel pump captured in Laser HD mode for fine detail',
+      'Scan data intended for reverse engineering, CAD modelling and replacement parts',
+      'Marker mat used under the part for reliable frame alignment',
+      'IR Rapid mode available for ute trays, panels, chassis and full vehicles',
+      'Replaces a Creality Ferret with better capture and software handling',
+    ],
+    specs: [
+      { label: 'Scanner', value: 'Einstar 2 (Shining 3D)' },
+      { label: 'Scan Method', value: 'Laser HD mode, marker turntable' },
+      { label: 'Software', value: 'EinStar Hub' },
+      { label: 'Subject', value: 'Honda CBR600RR fuel pump assembly' },
+      { label: 'Output', value: 'Cleaned mesh for reverse engineering' },
+    ],
+    process: [
+      'Set the fuel pump on a marker mat for tracking reference',
+      'Select Laser HD mode for small part detail capture',
+      'Run the scan around the pump body and mounting flange',
+      'Process the mesh in EinStar Hub after scan completion',
+      'Apply mesh optimisation, smoothing and curvature-based hole filling',
+      'Export the cleaned mesh as reference geometry for CAD work',
+    ],
+    gallery: ['/einstar-2-3d-scanner/DZRwFqvEyEq_1.jpg', '/einstar-2-3d-scanner/DZRwFqvEyEq_2.mp4'],
+  },
+  {
     slug: 'yzf-r7-pod-filter-airbox',
     title: 'YZF-R7 Pod Filter Airbox',
     description:
@@ -127,9 +324,10 @@ export const projects: Project[] = [
     specs: [
       { label: 'Material', value: 'Carbon Fibre–reinforced Nylon (PA-CF)' },
       { label: 'Print Method', value: 'FDM (solid infill, 4mm wall)' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Software', value: 'Fusion 360 (surface modelling)' },
+      { label: 'Reference Method', value: '3D scan of OEM engine case' },
+      { label: 'Fastening', value: 'Bolt-on using OEM case bolt locations' },
+      { label: 'Finish', value: 'Embossed Bastian Built logo, matte black as-printed' },
     ],
     process: [
       '3D scan OEM engine case as dimensional reference',
@@ -164,11 +362,12 @@ export const projects: Project[] = [
       'Prototype-ready CAD prepared for 3D printed test fitting',
     ],
     specs: [
-      { label: 'Material', value: '' },
-      { label: 'Print Method', value: '' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Software', value: 'Fusion 360' },
+      { label: 'Modelling Approach', value: 'Surface modelling with guide curves' },
+      { label: 'Vehicle Fitment', value: 'Honda CBR600RR front end' },
+      { label: 'Reference Method', value: 'Moto2/Kalex fender profiles and OEM hugger geometry' },
+      { label: 'Fastening', value: 'Bolt-through fork-leg mounting bosses' },
+      { label: 'Status', value: 'Prototype CAD prepared for 3D printed test fit' },
     ],
     process: [
       'Study Moto2 front fender profiles and OEM reference geometry',
@@ -202,11 +401,11 @@ export const projects: Project[] = [
       'Animated CAD components for motion/clearance validation',
     ],
     specs: [
-      { label: 'Material', value: '' },
       { label: 'Print Method', value: 'N/A (CAD for fabrication)' },
-      { label: 'Weight', value: '' },
       { label: 'Dimensions', value: '1780 × 2000mm' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Compatible Hardware', value: 'APB canopy and under-tray boxes' },
+      { label: 'Lighting', value: 'JB74 tail lights, recessed Stedi C4 reverse/flood' },
+      { label: 'Design Stage', value: 'Beta CAD concept, animated for motion checks' },
     ],
     process: [
       'Define tray requirements (canopy, boxes, lighting, mounts)',
@@ -240,9 +439,9 @@ export const projects: Project[] = [
     specs: [
       { label: 'Material', value: 'Carbon Fibre–infused Nylon (PA-CF)' },
       { label: 'Print Method', value: 'FDM' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Software', value: 'Fusion 360' },
+      { label: 'Reference Method', value: '3D scan of original engine cases' },
+      { label: 'Compatible Hardware', value: 'Honda CBR600 F2/F3 engine cases, OEM bolt pattern' },
     ],
     process: [
       '3D scan original engine cases for reference geometry',
@@ -278,11 +477,11 @@ export const projects: Project[] = [
       'Designed to suit standard wheelie bin wheels',
     ],
     specs: [
-      { label: 'Material', value: '' },
       { label: 'Print Method', value: 'FDM' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Assembly', value: 'Multi-piece rim — face, barrel and lip' },
+      { label: 'Fastening', value: 'Bolted multipart assembly' },
+      { label: 'Compatible Hardware', value: 'Standard wheelie bin wheels' },
+      { label: 'Finish', value: 'Two-tone colour variants — painted face with contrasting lip' },
     ],
     process: [
       'Reference automotive wheel designs and define rim styling',
@@ -316,11 +515,12 @@ export const projects: Project[] = [
       'Scan-to-CAD workflow for complex interior geometry',
     ],
     specs: [
-      { label: 'Material', value: '' },
-      { label: 'Print Method', value: '' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Vehicle', value: 'Ford FG Falcon Ute' },
+      { label: 'Scan Method', value: '3D scan of full rear cabin width' },
+      { label: 'Reference Method', value: 'Cleaned scan mesh used as CAD packaging reference' },
+      { label: 'Variants', value: 'Dual 10" and dual 8"' },
+      { label: 'Design Constraints', value: 'Enclosure volume and driver spacing' },
+      { label: 'Output Files', value: 'CAD enclosure models fitted to scan' },
     ],
     process: [
       '3D scan rear cabin to capture complex geometry',
@@ -354,9 +554,13 @@ export const projects: Project[] = [
     specs: [
       { label: 'Material', value: 'ASA-CF (carbon fibre–infused ASA)' },
       { label: 'Print Method', value: 'FDM' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Software', value: 'Autodesk Fusion' },
+      {
+        label: 'Reference Method',
+        value: 'Hand measurement of intact opposite-side part with calipers and rulers',
+      },
+      { label: 'Fastening', value: 'Reuses OEM strap and bolted mounting interface' },
+      { label: 'Surface Detail', value: 'Moulded-in wave tread pattern' },
     ],
     process: [
       'Use intact footrest as dimensional reference',
@@ -392,9 +596,13 @@ export const projects: Project[] = [
     specs: [
       { label: 'Material', value: 'PLA' },
       { label: 'Print Method', value: 'FDM (multi-part print)' },
-      { label: 'Weight', value: '' },
       { label: 'Dimensions', value: '1:64 scale' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Software', value: 'Fusion 360' },
+      { label: 'Assembly', value: 'Six printed parts, dry-fitted' },
+      {
+        label: 'Reference Method',
+        value: 'Original architectural plans plus photos of modifications',
+      },
     ],
     process: [
       'Review architectural plans and identify key features',
@@ -429,9 +637,9 @@ export const projects: Project[] = [
     specs: [
       { label: 'Material', value: 'Carbon Fibre–infused Nylon (PA-CF)' },
       { label: 'Print Method', value: 'FDM' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Components', value: 'Axle sliders, two-piece Quad Lock handlebar mount' },
+      { label: 'Fastening', value: 'Bolt with nyloc nut on sliding clamp' },
+      { label: 'Planned Improvements', value: 'TPU grip layer, heat-set nutserts' },
     ],
     process: [
       'Define impact/sliding requirements for slider behaviour',
@@ -464,11 +672,12 @@ export const projects: Project[] = [
       'Planned improvements: 3D scanning + CNC-cut components',
     ],
     specs: [
-      { label: 'Material', value: '' },
       { label: 'Print Method', value: 'N/A (fabricated)' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Material', value: 'Welded steel frame with hardwood timber deck' },
+      { label: 'Fabrication', value: 'MIG welded, manually cut and shaped' },
+      { label: 'Reference Method', value: 'Hand measurements and reference photos' },
+      { label: 'Finish', value: 'Gloss white paint, varnished timber floor' },
+      { label: 'Completed', value: 'November 2023' },
     ],
     process: [
       'Measure vehicle and establish tray constraints',
@@ -503,11 +712,11 @@ export const projects: Project[] = [
       'Improved serviceability and repeatability vs original version',
     ],
     specs: [
-      { label: 'Material', value: '' },
       { label: 'Print Method', value: 'FDM (multi-piece, support-minimised)' },
-      { label: 'Weight', value: '' },
-      { label: 'Dimensions', value: '' },
-      { label: 'Post-Processing', value: '' },
+      { label: 'Assembly', value: 'Three-piece — adapter, base, lettering' },
+      { label: 'Fastening', value: 'Nutserts, screws and glue' },
+      { label: 'Finish', value: 'Solid-colour plastic — gloss black base, white lettering' },
+      { label: 'Compatible Hardware', value: 'Toyota Hilux N50 factory grille' },
     ],
     process: [
       'Review original badge design and identify weak points',

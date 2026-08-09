@@ -1,0 +1,321 @@
+{
+  "cbr600rr-engine-case-cover": {
+    "kept": [
+      {
+        "label": "Material",
+        "value": "Carbon Fibre–reinforced Nylon (PA-CF)"
+      },
+      {
+        "label": "Print Method",
+        "value": "FDM (solid infill, 4mm wall)"
+      }
+    ],
+    "added": [
+      {
+        "label": "Software",
+        "value": "Fusion 360 (surface modelling)"
+      },
+      {
+        "label": "Reference Method",
+        "value": "3D scan of OEM engine case"
+      },
+      {
+        "label": "Fastening",
+        "value": "Bolt-on using OEM case bolt locations"
+      },
+      {
+        "label": "Finish",
+        "value": "Embossed Bastian Built logo, matte black as-printed"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "cbr600rr-gp-style-front-fender-prototype": {
+    "kept": [],
+    "added": [
+      {
+        "label": "Software",
+        "value": "Fusion 360"
+      },
+      {
+        "label": "Modelling Approach",
+        "value": "Surface modelling with guide curves"
+      },
+      {
+        "label": "Vehicle Fitment",
+        "value": "Honda CBR600RR front end"
+      },
+      {
+        "label": "Reference Method",
+        "value": "Moto2/Kalex fender profiles and OEM hugger geometry"
+      },
+      {
+        "label": "Fastening",
+        "value": "Bolt-through fork-leg mounting bosses"
+      },
+      {
+        "label": "Status",
+        "value": "Prototype CAD prepared for 3D printed test fit"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "1780-x-2000-mm-tray-ln106-single-cab-beta-design": {
+    "kept": [
+      {
+        "label": "Print Method",
+        "value": "N/A (CAD for fabrication)"
+      },
+      {
+        "label": "Dimensions",
+        "value": "1780 × 2000mm"
+      }
+    ],
+    "added": [
+      {
+        "label": "Compatible Hardware",
+        "value": "APB canopy and under-tray boxes"
+      },
+      {
+        "label": "Lighting",
+        "value": "JB74 tail lights, recessed Stedi C4 reverse/flood"
+      },
+      {
+        "label": "Design Stage",
+        "value": "Beta CAD concept, animated for motion checks"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "engine-covers-cbr600-f2-f3": {
+    "kept": [
+      {
+        "label": "Material",
+        "value": "Carbon Fibre–infused Nylon (PA-CF)"
+      },
+      {
+        "label": "Print Method",
+        "value": "FDM"
+      }
+    ],
+    "added": [
+      {
+        "label": "Software",
+        "value": "Fusion 360"
+      },
+      {
+        "label": "Reference Method",
+        "value": "3D scan of original engine cases"
+      },
+      {
+        "label": "Compatible Hardware",
+        "value": "Honda CBR600 F2/F3 engine cases, OEM bolt pattern"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "want-the-coolest-bin-on-the-block": {
+    "kept": [
+      {
+        "label": "Print Method",
+        "value": "FDM"
+      }
+    ],
+    "added": [
+      {
+        "label": "Assembly",
+        "value": "Multi-piece rim — face, barrel and lip"
+      },
+      {
+        "label": "Fastening",
+        "value": "Bolted multipart assembly"
+      },
+      {
+        "label": "Compatible Hardware",
+        "value": "Standard wheelie bin wheels"
+      },
+      {
+        "label": "Finish",
+        "value": "Two-tone colour variants — painted face with contrasting lip"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "subwoofer-box-fg-falcon-ute": {
+    "kept": [],
+    "added": [
+      {
+        "label": "Vehicle",
+        "value": "Ford FG Falcon Ute"
+      },
+      {
+        "label": "Scan Method",
+        "value": "3D scan of full rear cabin width"
+      },
+      {
+        "label": "Reference Method",
+        "value": "Cleaned scan mesh used as CAD packaging reference"
+      },
+      {
+        "label": "Variants",
+        "value": "Dual 10\" and dual 8\""
+      },
+      {
+        "label": "Design Constraints",
+        "value": "Enclosure volume and driver spacing"
+      },
+      {
+        "label": "Output Files",
+        "value": "CAD enclosure models fitted to scan"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "wheelchair-footrest-replacement": {
+    "kept": [
+      {
+        "label": "Material",
+        "value": "ASA-CF (carbon fibre–infused ASA)"
+      },
+      {
+        "label": "Print Method",
+        "value": "FDM"
+      }
+    ],
+    "added": [
+      {
+        "label": "Software",
+        "value": "Autodesk Fusion"
+      },
+      {
+        "label": "Reference Method",
+        "value": "Hand measurement of intact opposite-side part with calipers and rulers"
+      },
+      {
+        "label": "Fastening",
+        "value": "Reuses OEM strap and bolted mounting interface"
+      },
+      {
+        "label": "Surface Detail",
+        "value": "Moulded-in wave tread pattern"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "mid-century-home-1-64-scale-model": {
+    "kept": [
+      {
+        "label": "Material",
+        "value": "PLA"
+      },
+      {
+        "label": "Print Method",
+        "value": "FDM (multi-part print)"
+      },
+      {
+        "label": "Dimensions",
+        "value": "1:64 scale"
+      }
+    ],
+    "added": [
+      {
+        "label": "Software",
+        "value": "Fusion 360"
+      },
+      {
+        "label": "Assembly",
+        "value": "Six printed parts, dry-fitted"
+      },
+      {
+        "label": "Reference Method",
+        "value": "Original architectural plans plus photos of modifications"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "axle-sliders": {
+    "kept": [
+      {
+        "label": "Material",
+        "value": "Carbon Fibre–infused Nylon (PA-CF)"
+      },
+      {
+        "label": "Print Method",
+        "value": "FDM"
+      }
+    ],
+    "added": [
+      {
+        "label": "Components",
+        "value": "Axle sliders, two-piece Quad Lock handlebar mount"
+      },
+      {
+        "label": "Fastening",
+        "value": "Bolt with nyloc nut on sliding clamp"
+      },
+      {
+        "label": "Planned Improvements",
+        "value": "TPU grip layer, heat-set nutserts"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "97-hilux-extra-cab-rn110r-tray-build": {
+    "kept": [
+      {
+        "label": "Print Method",
+        "value": "N/A (fabricated)"
+      }
+    ],
+    "added": [
+      {
+        "label": "Material",
+        "value": "Welded steel frame with hardwood timber deck"
+      },
+      {
+        "label": "Fabrication",
+        "value": "MIG welded, manually cut and shaped"
+      },
+      {
+        "label": "Reference Method",
+        "value": "Hand measurements and reference photos"
+      },
+      {
+        "label": "Finish",
+        "value": "Gloss white paint, varnished timber floor"
+      },
+      {
+        "label": "Completed",
+        "value": "November 2023"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  },
+  "n50-hilux-toyota-grill-badge": {
+    "kept": [
+      {
+        "label": "Print Method",
+        "value": "FDM (multi-piece, support-minimised)"
+      }
+    ],
+    "added": [
+      {
+        "label": "Assembly",
+        "value": "Three-piece — adapter, base, lettering"
+      },
+      {
+        "label": "Fastening",
+        "value": "Nutserts, screws and glue"
+      },
+      {
+        "label": "Finish",
+        "value": "Solid-colour plastic — gloss black base, white lettering"
+      },
+      {
+        "label": "Compatible Hardware",
+        "value": "Toyota Hilux N50 factory grille"
+      }
+    ],
+    "model": "anthropic/claude-opus-5"
+  }
+}
