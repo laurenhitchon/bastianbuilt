@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.6.4...v1.7.0) (2026-08-10)
+
+### Features
+
+* **contact:** rate limit the contact endpoint and escape user input in its email ([#38](https://github.com/laurenhitchon/bastianbuilt/issues/38)) ([5d0237b](https://github.com/laurenhitchon/bastianbuilt/commit/5d0237b0ff537efa9c225e8b3756b9621e336f00))
+
 ## [1.6.4](https://github.com/laurenhitchon/bastianbuilt/compare/v1.6.3...v1.6.4) (2026-08-10)
 
 ### Bug Fixes
