@@ -1,11 +1,29 @@
 import { CONTACT_FIELD_LIMITS, renderContactEmail } from '@/lib/contact-email'
 import { getDb } from '@/lib/db'
+import { checkContactRateLimit } from '@/lib/rate-limit'
 import { contacts } from '@/lib/schema'
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
 export async function POST(request: Request) {
   try {
+    // Before anything else: the endpoint is public and every request past this
+    // point costs a database write and a message from the Resend quota.
+    const rateLimit = await checkContactRateLimit(request)
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Too many messages sent. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(rateLimit.retryAfter),
+            'X-RateLimit-Limit': String(rateLimit.limit),
+            'X-RateLimit-Remaining': String(rateLimit.remaining),
+          },
+        },
+      )
+    }
+
     const { name, email, message } = await request.json()
 
     // Validate input

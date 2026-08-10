@@ -2,14 +2,17 @@ import { CONTACT_FIELD_LIMITS } from '@/lib/contact-email'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { POST } from './route'
 
-const { insertValues, send } = vi.hoisted(() => ({
+const { insertValues, send, checkContactRateLimit } = vi.hoisted(() => ({
   insertValues: vi.fn(),
   send: vi.fn(),
+  checkContactRateLimit: vi.fn(),
 }))
 
 vi.mock('@/lib/db', () => ({
   getDb: () => ({ insert: () => ({ values: insertValues }) }),
 }))
+
+vi.mock('@/lib/rate-limit', () => ({ checkContactRateLimit }))
 
 vi.mock('resend', () => ({
   // The handler calls `new Resend(...)`, so the double has to be constructable.
@@ -35,6 +38,12 @@ const sentEmail = () => {
 beforeEach(() => {
   insertValues.mockResolvedValue(undefined)
   send.mockResolvedValue({ data: { id: 'test-email-id' }, error: null })
+  checkContactRateLimit.mockResolvedValue({
+    allowed: true,
+    limit: 5,
+    remaining: 4,
+    retryAfter: 0,
+  })
   vi.stubEnv('RESEND_API_KEY', 'test-key')
 })
 
@@ -119,6 +128,28 @@ describe('POST /api/contact', () => {
     const response = await post({ ...body, [field]: overflow })
 
     expect(response.status).toBe(400)
+    expect(insertValues).not.toHaveBeenCalled()
+    expect(send).not.toHaveBeenCalled()
+  })
+
+  it('rejects a rate limited sender before reading the body', async () => {
+    checkContactRateLimit.mockResolvedValue({
+      allowed: false,
+      limit: 5,
+      remaining: 0,
+      retryAfter: 90,
+    })
+
+    const response = await post({ name: 'Ada', email: 'ada@example.com', message: 'Hello' })
+
+    expect(response.status).toBe(429)
+    await expect(response.json()).resolves.toEqual({
+      error: 'Too many messages sent. Please try again later.',
+    })
+    expect(response.headers.get('Retry-After')).toBe('90')
+    expect(response.headers.get('X-RateLimit-Limit')).toBe('5')
+    expect(response.headers.get('X-RateLimit-Remaining')).toBe('0')
+    // The whole point is that a blocked request costs neither a row nor an email.
     expect(insertValues).not.toHaveBeenCalled()
     expect(send).not.toHaveBeenCalled()
   })
