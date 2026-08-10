@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   generate-title:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-ai-pr-title.yml@a244014e317c6ab661d7c53ecd9152773b87c3be # v1
+    uses: digitalnsw/nswds-devops/.github/workflows/reusable-ai-pr-title.yml@cef727dd6d071996263ee057bd853fbe460039e2 # v1
     secrets:
       # Explicit mapping, not inherit — this workflow gets only the secrets it
       # uses; inherit would hand every repo secret to the called workflow.
