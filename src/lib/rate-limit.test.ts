@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { limit, slidingWindow, ratelimitConstructor } = vi.hoisted(() => ({
+const { limit, slidingWindow, ratelimitConstructor, redisConstructor } = vi.hoisted(() => ({
   limit: vi.fn(),
   slidingWindow: vi.fn(() => 'sliding-window'),
   ratelimitConstructor: vi.fn(),
+  redisConstructor: vi.fn(),
 }))
 
 vi.mock('@upstash/ratelimit', () => ({
@@ -17,28 +18,46 @@ vi.mock('@upstash/ratelimit', () => ({
 }))
 
 vi.mock('@upstash/redis', () => ({
-  Redis: { fromEnv: () => ({ __redis: true }) },
+  Redis: class {
+    constructor(config: unknown) {
+      redisConstructor(config)
+    }
+  },
 }))
 
 /**
  * The limiter is memoised per module instance, so each test imports a fresh
- * copy after stubbing the environment it should resolve against.
+ * copy after stubbing the environment it should resolve against. `env` names
+ * the exact variables to set, because which pair is present is the thing
+ * several of these tests are about.
  */
-const loadModule = async (env: { url?: string; token?: string } = {}) => {
+const loadModule = async (env: Record<string, string> = {}) => {
   vi.resetModules()
-  if (env.url) vi.stubEnv('UPSTASH_REDIS_REST_URL', env.url)
-  if (env.token) vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', env.token)
+  for (const [name, value] of Object.entries(env)) {
+    vi.stubEnv(name, value)
+  }
   return import('@/lib/rate-limit')
 }
 
-const configured = () => loadModule({ url: 'https://redis.test', token: 'test-token' })
+/** Credentials as a database created directly on upstash.com supplies them. */
+const configured = () =>
+  loadModule({
+    UPSTASH_REDIS_REST_URL: 'https://redis.test',
+    UPSTASH_REDIS_REST_TOKEN: 'test-token',
+  })
 
 const request = (headers: Record<string, string> = {}) =>
   new Request('http://localhost/api/contact', { method: 'POST', headers })
 
 beforeEach(() => {
-  vi.stubEnv('UPSTASH_REDIS_REST_URL', '')
-  vi.stubEnv('UPSTASH_REDIS_REST_TOKEN', '')
+  for (const name of [
+    'UPSTASH_REDIS_REST_URL',
+    'UPSTASH_REDIS_REST_TOKEN',
+    'KV_REST_API_URL',
+    'KV_REST_API_TOKEN',
+  ]) {
+    vi.stubEnv(name, '')
+  }
   vi.spyOn(console, 'warn').mockImplementation(() => {})
   vi.spyOn(console, 'error').mockImplementation(() => {})
 })
@@ -87,6 +106,62 @@ describe('checkContactRateLimit', () => {
     await expect(checkContactRateLimit(request())).resolves.toMatchObject({ allowed: true })
     expect(limit).not.toHaveBeenCalled()
     expect(console.warn).toHaveBeenCalledOnce()
+  })
+
+  it('activates on the KV_REST_API_* pair the Vercel integration provisions', async () => {
+    // The Upstash for Redis integration on the Vercel Marketplace sets these
+    // names, not UPSTASH_REDIS_REST_*. Gating on only the latter left the
+    // limiter permanently disabled on a correctly provisioned deployment.
+    const { checkContactRateLimit } = await loadModule({
+      KV_REST_API_URL: 'https://kv.test',
+      KV_REST_API_TOKEN: 'kv-token',
+    })
+    limit.mockResolvedValue({
+      success: true,
+      limit: 5,
+      remaining: 4,
+      reset: Date.now() + 60_000,
+      pending: Promise.resolve(),
+    })
+
+    await checkContactRateLimit(request())
+
+    expect(limit).toHaveBeenCalledOnce()
+    expect(redisConstructor).toHaveBeenCalledWith({
+      url: 'https://kv.test',
+      token: 'kv-token',
+    })
+  })
+
+  it('prefers the UPSTASH_* pair when both are present', async () => {
+    const { checkContactRateLimit } = await loadModule({
+      UPSTASH_REDIS_REST_URL: 'https://redis.test',
+      UPSTASH_REDIS_REST_TOKEN: 'test-token',
+      KV_REST_API_URL: 'https://kv.test',
+      KV_REST_API_TOKEN: 'kv-token',
+    })
+    limit.mockResolvedValue({
+      success: true,
+      limit: 5,
+      remaining: 4,
+      reset: Date.now() + 60_000,
+      pending: Promise.resolve(),
+    })
+
+    await checkContactRateLimit(request())
+
+    expect(redisConstructor).toHaveBeenCalledWith({
+      url: 'https://redis.test',
+      token: 'test-token',
+    })
+  })
+
+  it('stays disabled when only half a credential pair is present', async () => {
+    const { checkContactRateLimit } = await loadModule({ KV_REST_API_URL: 'https://kv.test' })
+
+    await expect(checkContactRateLimit(request())).resolves.toMatchObject({ allowed: true })
+    expect(limit).not.toHaveBeenCalled()
+    expect(redisConstructor).not.toHaveBeenCalled()
   })
 
   it('resolves the limiter once and reuses it', async () => {
