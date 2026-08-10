@@ -1,3 +1,4 @@
+import { CONTACT_FIELD_LIMITS, renderContactEmail } from '@/lib/contact-email'
 import { getDb } from '@/lib/db'
 import { contacts } from '@/lib/schema'
 import { NextResponse } from 'next/server'
@@ -10,6 +11,32 @@ export async function POST(request: Request) {
     // Validate input
     if (!name || !email || !message) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 })
+    }
+
+    // A non-string field would otherwise reach `db.insert` and the email
+    // renderer and fail there as an opaque 500.
+    if (typeof name !== 'string' || typeof email !== 'string' || typeof message !== 'string') {
+      return NextResponse.json({ error: 'All fields must be text' }, { status: 400 })
+    }
+
+    // Bound the payload before it is stored or mailed.
+    if (name.length > CONTACT_FIELD_LIMITS.name) {
+      return NextResponse.json(
+        { error: `Name must be ${CONTACT_FIELD_LIMITS.name} characters or fewer` },
+        { status: 400 },
+      )
+    }
+    if (email.length > CONTACT_FIELD_LIMITS.email) {
+      return NextResponse.json(
+        { error: `Email must be ${CONTACT_FIELD_LIMITS.email} characters or fewer` },
+        { status: 400 },
+      )
+    }
+    if (message.length > CONTACT_FIELD_LIMITS.message) {
+      return NextResponse.json(
+        { error: `Message must be ${CONTACT_FIELD_LIMITS.message} characters or fewer` },
+        { status: 400 },
+      )
     }
 
     // Validate email format
@@ -36,18 +63,15 @@ export async function POST(request: Request) {
     const toEmail = process.env.CONTACT_TO_EMAIL || 'contact@bastianbuilt.com'
     const fromEmail = process.env.CONTACT_FROM_EMAIL || 'Portfolio Contact <onboarding@resend.dev>'
 
+    const { subject, text, html } = renderContactEmail({ name, email, message })
+
     await resend.emails.send({
       from: fromEmail,
       to: toEmail,
       replyTo: email,
-      subject: `New Contact Form Submission from ${name}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-      `,
+      subject,
+      text,
+      html,
     })
 
     return NextResponse.json(
