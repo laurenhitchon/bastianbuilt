@@ -3,11 +3,36 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Instagram, Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import { motion } from 'motion/react'
 
 import type React from 'react'
 import { useState } from 'react'
+
+// Lucide dropped its brand icons in v1, so Instagram is drawn locally. Geometry
+// and stroke attributes match Lucide's own conventions (24x24 box, currentColor,
+// 2px round-capped strokes) so it sits consistently beside the Mail icon.
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden='true'
+      className={className}
+      fill='none'
+      height='24'
+      stroke='currentColor'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      strokeWidth={2}
+      viewBox='0 0 24 24'
+      width='24'
+      xmlns='http://www.w3.org/2000/svg'
+    >
+      <rect height='20' rx='5' ry='5' width='20' x='2' y='2' />
+      <path d='M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z' />
+      <line x1='17.5' x2='17.51' y1='6.5' y2='6.5' />
+    </svg>
+  )
+}
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
@@ -158,7 +183,11 @@ export function Contact() {
                       text: 'bastian@hitchon.me',
                       href: 'mailto:bastian@hitchon.me',
                     },
-                    { icon: Instagram, text: 'Instagram', href: 'instagram.com/bastian.built/' },
+                    {
+                      icon: InstagramIcon,
+                      text: 'Instagram',
+                      href: 'https://instagram.com/bastian.built/',
+                    },
                   ].map((link, index) => (
                     <motion.a
                       key={link.text}
