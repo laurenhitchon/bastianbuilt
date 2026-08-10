@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { normalizeProjectMediaItem } from '@/lib/media'
 import { projects } from '@/lib/projects'
-import { cubicBezier, motion, useInView } from 'framer-motion'
+import { cubicBezier, motion, useInView } from 'motion/react'
 import Link from 'next/link'
 import { useRef } from 'react'
 
