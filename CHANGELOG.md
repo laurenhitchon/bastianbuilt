@@ -1,3 +1,9 @@
+## [1.7.2](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.1...v1.7.2) (2026-08-10)
+
+### Bug Fixes
+
+* **contact:** accept the env var names the Upstash integration provisions ([#41](https://github.com/laurenhitchon/bastianbuilt/issues/41)) ([481daa1](https://github.com/laurenhitchon/bastianbuilt/commit/481daa1dbd25e498ab52df283392c492d9c6ad89))
+
 ## [1.7.1](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.0...v1.7.1) (2026-08-10)
 
 ### Bug Fixes
