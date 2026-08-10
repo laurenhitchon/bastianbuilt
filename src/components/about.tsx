@@ -1,6 +1,6 @@
 'use client'
 
-import { cubicBezier, motion, useInView } from 'framer-motion'
+import { cubicBezier, motion, useInView } from 'motion/react'
 import { useRef } from 'react'
 
 export function About() {
