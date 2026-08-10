@@ -1,3 +1,9 @@
+## [1.7.1](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.0...v1.7.1) (2026-08-10)
+
+### Bug Fixes
+
+* **deps:** import motion from motion/react instead of framer-motion ([#40](https://github.com/laurenhitchon/bastianbuilt/issues/40)) ([9988526](https://github.com/laurenhitchon/bastianbuilt/commit/9988526f6d77f27e7c318cb7e2eac6389c32e4b3))
+
 ## [1.7.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.6.4...v1.7.0) (2026-08-10)
 
 ### Features
