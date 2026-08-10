@@ -1,3 +1,9 @@
+## [1.7.3](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.2...v1.7.3) (2026-08-10)
+
+### Bug Fixes
+
+* **contact:** replace removed Lucide Instagram icon and fix its link ([#42](https://github.com/laurenhitchon/bastianbuilt/issues/42)) ([d7b28d1](https://github.com/laurenhitchon/bastianbuilt/commit/d7b28d1b842b8736e546423c9b29368813340bd1))
+
 ## [1.7.2](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.1...v1.7.2) (2026-08-10)
 
 ### Bug Fixes
