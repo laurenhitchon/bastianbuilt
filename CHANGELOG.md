@@ -1,3 +1,9 @@
+## [1.6.4](https://github.com/laurenhitchon/bastianbuilt/compare/v1.6.3...v1.6.4) (2026-08-10)
+
+### Bug Fixes
+
+* **deps:** update dependency sonner to v2 ([#33](https://github.com/laurenhitchon/bastianbuilt/issues/33)) ([5cb1e20](https://github.com/laurenhitchon/bastianbuilt/commit/5cb1e20ca44658a2ba3a6bd77c66b490021c2d5b))
+
 ## [1.6.3](https://github.com/laurenhitchon/bastianbuilt/compare/v1.6.2...v1.6.3) (2026-08-10)
 
 ### Bug Fixes
