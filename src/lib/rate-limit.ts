@@ -31,16 +31,23 @@ function getLimiter(): Ratelimit | null {
     return limiter
   }
 
-  // Set by the Upstash integration from the Vercel Marketplace. Missing means
-  // local development, or a deploy made before the integration was added.
-  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
+  // The Upstash for Redis integration on the Vercel Marketplace provisions the
+  // KV_REST_API_* pair; UPSTASH_REDIS_REST_* is what a database created
+  // directly on upstash.com gives you. Accept either, in the same order
+  // `Redis.fromEnv()` resolves them, so this gate can never disagree with the
+  // client about whether credentials exist. Neither present means local
+  // development, or a deploy made before the integration was added.
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN
+
+  if (!url || !token) {
     console.warn('[rate-limit] Upstash env vars missing - contact rate limiting is disabled')
     limiter = null
     return limiter
   }
 
   limiter = new Ratelimit({
-    redis: Redis.fromEnv(),
+    redis: new Redis({ url, token }),
     limiter: Ratelimit.slidingWindow(CONTACT_RATE_LIMIT.requests, CONTACT_RATE_LIMIT.window),
     prefix: 'ratelimit:contact',
     analytics: false,
