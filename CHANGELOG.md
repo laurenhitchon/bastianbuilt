@@ -1,3 +1,9 @@
+## [1.6.3](https://github.com/laurenhitchon/bastianbuilt/compare/v1.6.2...v1.6.3) (2026-08-10)
+
+### Bug Fixes
+
+* **deps:** replace dependency framer-motion with motion ([#18](https://github.com/laurenhitchon/bastianbuilt/issues/18)) ([774dfcd](https://github.com/laurenhitchon/bastianbuilt/commit/774dfcd331c30acdbef8d5e403c5c7ad6031ec12))
+
 ## [1.6.2](https://github.com/laurenhitchon/bastianbuilt/compare/v1.6.1...v1.6.2) (2026-08-10)
 
 ### Bug Fixes
