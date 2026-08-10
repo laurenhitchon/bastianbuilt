@@ -1,3 +1,9 @@
+## [1.6.1](https://github.com/laurenhitchon/bastianbuilt/compare/v1.6.0...v1.6.1) (2026-08-10)
+
+### Bug Fixes
+
+* **deps:** update dependency drizzle-orm to ^0.45.0 [security] ([#15](https://github.com/laurenhitchon/bastianbuilt/issues/15)) ([e27c104](https://github.com/laurenhitchon/bastianbuilt/commit/e27c1046c4252b72983984a24c78e1a4e5537cae))
+
 # [1.6.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.5.0...v1.6.0) (2026-08-09)
 
 
