@@ -1,3 +1,9 @@
+## [1.7.4](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.3...v1.7.4) (2026-08-11)
+
+### Bug Fixes
+
+* **deps:** update @vercel/analytics to v2 ([#44](https://github.com/laurenhitchon/bastianbuilt/issues/44)) ([f2387fa](https://github.com/laurenhitchon/bastianbuilt/commit/f2387fada893a551828aaa3159f311c3ba4306e3))
+
 ## [1.7.3](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.2...v1.7.3) (2026-08-10)
 
 ### Bug Fixes
