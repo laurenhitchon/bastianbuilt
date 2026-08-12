@@ -2,14 +2,21 @@ import { CONTACT_FIELD_LIMITS } from '@/lib/contact-email'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { POST } from './route'
 
-const { insertValues, send, checkContactRateLimit } = vi.hoisted(() => ({
+const { insertValues, updateSet, updateWhere, send, checkContactRateLimit } = vi.hoisted(() => ({
   insertValues: vi.fn(),
+  updateSet: vi.fn(),
+  updateWhere: vi.fn(),
   send: vi.fn(),
   checkContactRateLimit: vi.fn(),
 }))
 
+// Models the two chains the handler actually uses: an insert that returns the
+// new id, and the update that stamps notified_at once the owner is notified.
 vi.mock('@/lib/db', () => ({
-  getDb: () => ({ insert: () => ({ values: insertValues }) }),
+  getDb: () => ({
+    insert: () => ({ values: (...args: unknown[]) => insertValues(...args) }),
+    update: () => ({ set: (...args: unknown[]) => updateSet(...args) }),
+  }),
 }))
 
 vi.mock('@/lib/rate-limit', () => ({ checkContactRateLimit }))
@@ -36,7 +43,10 @@ const sentEmail = () => {
 }
 
 beforeEach(() => {
-  insertValues.mockResolvedValue(undefined)
+  // `.returning()` hands back the new row's id so it can be stamped later.
+  insertValues.mockReturnValue({ returning: () => Promise.resolve([{ id: 1 }]) })
+  updateSet.mockReturnValue({ where: updateWhere })
+  updateWhere.mockResolvedValue(undefined)
   send.mockResolvedValue({ data: { id: 'test-email-id' }, error: null })
   checkContactRateLimit.mockResolvedValue({
     allowed: true,
@@ -96,12 +106,28 @@ describe('POST /api/contact', () => {
     expect(response.ok).toBe(true)
     expect(insertValues).toHaveBeenCalledOnce()
 
-    // The log is the owner's only signal that an enquiry went unnotified.
     expect(consoleError).toHaveBeenCalledWith(
-      '[contact] Resend rejected the message:',
+      '[contact] notification failed:',
+      'resend rejected the message',
       expect.objectContaining({ name: 'daily_quota_exceeded' }),
     )
+
+    // Left unstamped on purpose: an unnotified row is exactly what the
+    // scheduled sweep looks for, so the enquiry is no longer dependent on
+    // someone reading the log.
+    expect(updateSet).not.toHaveBeenCalled()
     consoleError.mockRestore()
+  })
+
+  it('stamps the row as notified once the send succeeds', async () => {
+    await post({ name: 'Ada', email: 'ada@example.com', message: 'Hello' })
+
+    // Without this the sweep cannot tell a delivered enquiry from a lost one
+    // and would re-mail every row it finds.
+    expect(updateSet).toHaveBeenCalledWith(
+      expect.objectContaining({ notifiedAt: expect.any(Date) }),
+    )
+    expect(updateWhere).toHaveBeenCalledOnce()
   })
 
   it('never tells the sender to resend after a failed send', async () => {

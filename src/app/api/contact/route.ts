@@ -1,9 +1,10 @@
-import { CONTACT_FIELD_LIMITS, renderContactEmail } from '@/lib/contact-email'
+import { CONTACT_FIELD_LIMITS } from '@/lib/contact-email'
+import { sendContactNotification } from '@/lib/contact-notify'
 import { getDb } from '@/lib/db'
 import { checkContactRateLimit } from '@/lib/rate-limit'
 import { contacts } from '@/lib/schema'
+import { eq } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
 
 export async function POST(request: Request) {
   try {
@@ -82,44 +83,35 @@ export async function POST(request: Request) {
     }
 
     const db = getDb()
-    await db.insert(contacts).values({
-      name: trimmedName,
-      email: trimmedEmail,
-      message: trimmedMessage,
-      createdAt: new Date(),
-    })
-
-    const resend = new Resend(process.env.RESEND_API_KEY)
-
-    const toEmail = process.env.CONTACT_TO_EMAIL || 'contact@bastianbuilt.com'
-    const fromEmail = process.env.CONTACT_FROM_EMAIL || 'Portfolio Contact <onboarding@resend.dev>'
-
-    const { subject, text, html } = renderContactEmail({
-      name: trimmedName,
-      email: trimmedEmail,
-      message: trimmedMessage,
-    })
+    // The id comes back so the row can be stamped once the owner has actually
+    // been notified. Without it the sweep cannot tell a delivered enquiry from
+    // an undelivered one and would re-mail everything.
+    const [inserted] = await db
+      .insert(contacts)
+      .values({
+        name: trimmedName,
+        email: trimmedEmail,
+        message: trimmedMessage,
+        createdAt: new Date(),
+      })
+      .returning({ id: contacts.id })
 
     // Resend reports API failures in the resolved value instead of throwing, so
     // an unchecked send reports success for a message that was never delivered.
     // Quota exhaustion and a rejected From address both land here. The row is
     // already stored, so the submission survives even when the email does not.
-    const { error: sendError } = await resend.emails.send({
-      from: fromEmail,
-      to: toEmail,
-      replyTo: trimmedEmail,
-      subject,
-      text,
-      html,
+    const result = await sendContactNotification({
+      name: trimmedName,
+      email: trimmedEmail,
+      message: trimmedMessage,
     })
 
-    if (sendError) {
-      // This log is currently the only signal the owner gets, because the
-      // contacts table has no column recording whether a row was ever mailed.
-      // A scheduled sweep over unnotified rows is the real fix; until it exists
-      // the sender is pointed at a direct address so the enquiry has a route
-      // that does not depend on Resend.
-      console.error('[contact] Resend rejected the message:', sendError)
+    if (!result.sent) {
+      // The row stays unstamped, which is what puts it in front of the
+      // scheduled sweep in /api/contact/retry-unsent. The log remains useful
+      // for diagnosing why, but it is no longer the only thing standing between
+      // a failed send and a lost enquiry.
+      console.error('[contact] notification failed:', result.reason, result.error ?? '')
 
       // 202 rather than 5xx: the row is committed above, so the submission was
       // genuinely accepted and the sender has nothing to retry. Returning an
@@ -138,6 +130,12 @@ export async function POST(request: Request) {
         { status: 202 },
       )
     }
+
+    // Stamped only after the send succeeded, so the column means "the owner has
+    // seen this" rather than "we tried". If this update fails the row stays
+    // unstamped and the sweep mails it a second time — a duplicate notification
+    // is a far cheaper failure than an enquiry nobody ever reads.
+    await db.update(contacts).set({ notifiedAt: new Date() }).where(eq(contacts.id, inserted.id))
 
     return NextResponse.json(
       { success: true, message: 'Message sent successfully!' },
