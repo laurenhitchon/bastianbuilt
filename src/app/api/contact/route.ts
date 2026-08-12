@@ -114,10 +114,28 @@ export async function POST(request: Request) {
     })
 
     if (sendError) {
+      // This log is currently the only signal the owner gets, because the
+      // contacts table has no column recording whether a row was ever mailed.
+      // A scheduled sweep over unnotified rows is the real fix; until it exists
+      // the sender is pointed at a direct address so the enquiry has a route
+      // that does not depend on Resend.
       console.error('[contact] Resend rejected the message:', sendError)
+
+      // 202 rather than 5xx: the row is committed above, so the submission was
+      // genuinely accepted and the sender has nothing to retry. Returning an
+      // error status told them to resubmit, which cannot fix a quota or
+      // From-address rejection and banked a duplicate row on every attempt.
+      // 2xx also lets the client clear the form, which is what actually
+      // prevents the duplicate rather than merely discouraging it. The status
+      // still differs from the 200 success path, so a delivered enquiry and an
+      // undelivered one remain distinguishable in logs.
       return NextResponse.json(
-        { error: 'Message could not be sent. Please try again later.' },
-        { status: 502 },
+        {
+          success: true,
+          message:
+            "Thanks — your message has been received. If you don't hear back soon, please email bastian@hitchon.me directly.",
+        },
+        { status: 202 },
       )
     }
 

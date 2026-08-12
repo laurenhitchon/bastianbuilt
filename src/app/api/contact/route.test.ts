@@ -79,9 +79,10 @@ describe('POST /api/contact', () => {
     expect(html).toContain('Hello')
   })
 
-  it('reports a Resend rejection instead of claiming success', async () => {
+  it('accepts the enquiry and logs the failure when Resend rejects the send', async () => {
     // Resend resolves with an error rather than throwing, so an unchecked send
     // told the sender their message arrived when it never left the building.
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
     send.mockResolvedValue({
       data: null,
       error: { name: 'daily_quota_exceeded', message: 'Daily quota exceeded' },
@@ -89,12 +90,38 @@ describe('POST /api/contact', () => {
 
     const response = await post({ name: 'Ada', email: 'ada@example.com', message: 'Hello' })
 
-    expect(response.status).toBe(502)
-    await expect(response.json()).resolves.toEqual({
-      error: 'Message could not be sent. Please try again later.',
-    })
-    // The row is still banked, so the enquiry itself survives the failure.
+    // 202, not 200: the row is banked but nobody has been notified, so the two
+    // outcomes stay distinguishable to anyone reading the logs.
+    expect(response.status).toBe(202)
+    expect(response.ok).toBe(true)
     expect(insertValues).toHaveBeenCalledOnce()
+
+    // The log is the owner's only signal that an enquiry went unnotified.
+    expect(consoleError).toHaveBeenCalledWith(
+      '[contact] Resend rejected the message:',
+      expect.objectContaining({ name: 'daily_quota_exceeded' }),
+    )
+    consoleError.mockRestore()
+  })
+
+  it('never tells the sender to resend after a failed send', async () => {
+    // A retry cannot clear an exhausted quota or an unverified From address, and
+    // the client keeps the form populated on error — so an error response made
+    // "try again" a one-click way to bank a duplicate row per attempt.
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    send.mockResolvedValue({
+      data: null,
+      error: { name: 'daily_quota_exceeded', message: 'Daily quota exceeded' },
+    })
+
+    const response = await post({ name: 'Ada', email: 'ada@example.com', message: 'Hello' })
+    const body = (await response.json()) as { message?: string; error?: string }
+
+    expect(body.error).toBeUndefined()
+    expect(body.message).not.toMatch(/try again|resend|send it again/i)
+    // Points at a route that does not depend on Resend having worked.
+    expect(body.message).toContain('bastian@hitchon.me')
+    consoleError.mockRestore()
   })
 
   it('refuses before touching the database when the API key is missing', async () => {
