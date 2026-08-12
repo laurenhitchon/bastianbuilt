@@ -1,3 +1,9 @@
+## [1.7.7](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.6...v1.7.7) (2026-08-12)
+
+### Bug Fixes
+
+* **contact:** surface failed sends and trim submitted fields ([#48](https://github.com/laurenhitchon/bastianbuilt/issues/48)) ([4a120d6](https://github.com/laurenhitchon/bastianbuilt/commit/4a120d682f114f65453f27efc0d611c58004eea7))
+
 ## [1.7.6](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.5...v1.7.6) (2026-08-12)
 
 ### Bug Fixes
