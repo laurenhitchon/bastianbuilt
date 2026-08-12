@@ -79,6 +79,84 @@ describe('POST /api/contact', () => {
     expect(html).toContain('Hello')
   })
 
+  it('reports a Resend rejection instead of claiming success', async () => {
+    // Resend resolves with an error rather than throwing, so an unchecked send
+    // told the sender their message arrived when it never left the building.
+    send.mockResolvedValue({
+      data: null,
+      error: { name: 'daily_quota_exceeded', message: 'Daily quota exceeded' },
+    })
+
+    const response = await post({ name: 'Ada', email: 'ada@example.com', message: 'Hello' })
+
+    expect(response.status).toBe(502)
+    await expect(response.json()).resolves.toEqual({
+      error: 'Message could not be sent. Please try again later.',
+    })
+    // The row is still banked, so the enquiry itself survives the failure.
+    expect(insertValues).toHaveBeenCalledOnce()
+  })
+
+  it('refuses before touching the database when the API key is missing', async () => {
+    vi.stubEnv('RESEND_API_KEY', '')
+
+    const response = await post({ name: 'Ada', email: 'ada@example.com', message: 'Hello' })
+
+    expect(response.status).toBe(500)
+    expect(insertValues).not.toHaveBeenCalled()
+    expect(send).not.toHaveBeenCalled()
+  })
+
+  it('trims surrounding whitespace from every field', async () => {
+    await post({
+      name: '  Ada Lovelace  ',
+      email: '  ada@example.com  ',
+      message: '  Hello there  ',
+    })
+
+    expect(insertValues).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Ada Lovelace',
+        email: 'ada@example.com',
+        message: 'Hello there',
+      }),
+    )
+    expect(sentEmail().text).toContain('Name: Ada Lovelace')
+  })
+
+  it('accepts an address pasted with a trailing space', async () => {
+    // The email regex excludes whitespace, so without trimming this is the
+    // commonest way for a perfectly valid address to be rejected.
+    const response = await post({
+      name: 'Ada',
+      email: 'ada@example.com ',
+      message: 'Hello',
+    })
+
+    expect(response.status).toBe(200)
+    expect(send).toHaveBeenCalledOnce()
+    expect(send.mock.calls[0][0].replyTo).toBe('ada@example.com')
+  })
+
+  it('rejects a message of nothing but whitespace', async () => {
+    const response = await post({ name: 'Ada', email: 'ada@example.com', message: '   \n  ' })
+
+    expect(response.status).toBe(400)
+    await expect(response.json()).resolves.toEqual({ error: 'All fields are required' })
+    expect(insertValues).not.toHaveBeenCalled()
+    expect(send).not.toHaveBeenCalled()
+  })
+
+  it('measures the length caps against the trimmed value', async () => {
+    const response = await post({
+      name: `  ${'a'.repeat(CONTACT_FIELD_LIMITS.name)}  `,
+      email: 'ada@example.com',
+      message: 'Hello',
+    })
+
+    expect(response.status).toBe(200)
+  })
+
   it('stores the submission verbatim', async () => {
     // Escaping belongs to the email body only: the database keeps what was typed.
     await post({ name: 'Ada & Co', email: 'ada@example.com', message: '<b>Hi</b>' })
