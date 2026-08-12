@@ -1,3 +1,9 @@
+## [1.8.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.7...v1.8.0) (2026-08-12)
+
+### Features
+
+* **contact:** retry undelivered enquiry notifications on a schedule ([#50](https://github.com/laurenhitchon/bastianbuilt/issues/50)) ([a3a67b7](https://github.com/laurenhitchon/bastianbuilt/commit/a3a67b70af211cbcf19d5150a4a74816b9ef4c3c))
+
 ## [1.7.7](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.6...v1.7.7) (2026-08-12)
 
 ### Bug Fixes
