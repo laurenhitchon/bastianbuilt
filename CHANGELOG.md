@@ -1,3 +1,9 @@
+## [1.7.6](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.5...v1.7.6) (2026-08-12)
+
+### Bug Fixes
+
+* **deps:** update dependency motion to v13 ([#46](https://github.com/laurenhitchon/bastianbuilt/issues/46)) ([68f602b](https://github.com/laurenhitchon/bastianbuilt/commit/68f602b76274ea4a78b50969de37213c37eff311))
+
 ## [1.7.5](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.4...v1.7.5) (2026-08-12)
 
 ### Bug Fixes
