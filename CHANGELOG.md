@@ -1,3 +1,9 @@
+## [1.7.5](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.4...v1.7.5) (2026-08-12)
+
+### Bug Fixes
+
+* **deps:** update dependency resend to v6.19.0 ([#45](https://github.com/laurenhitchon/bastianbuilt/issues/45)) ([7b43345](https://github.com/laurenhitchon/bastianbuilt/commit/7b43345b639220445bede93689d058e157d4f236))
+
 ## [1.7.4](https://github.com/laurenhitchon/bastianbuilt/compare/v1.7.3...v1.7.4) (2026-08-11)
 
 ### Bug Fixes
