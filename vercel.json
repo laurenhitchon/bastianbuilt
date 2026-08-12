@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/contact/retry-unsent",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
