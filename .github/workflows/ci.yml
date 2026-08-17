@@ -22,4 +22,4 @@ permissions:
 
 jobs:
   install:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-ci.yml@cef727dd6d071996263ee057bd853fbe460039e2 # v1
+    uses: digitalnsw/nswds-devops/.github/workflows/reusable-ci.yml@6c3b697df0dcff8fc6f2a530b451d0e4c2a748e9 # v1
