@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   release:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-release.yml@8f60e2f9065d0e5db18b05614dfc4d30f4204bed # v1
+    uses: digitalnsw/nswds-devops/.github/workflows/reusable-release.yml@6754b3494a47894d89e9d1b0106a64e13a1a9443 # v1
     secrets:
       # Explicit mapping, not inherit — the release needs exactly one secret,
       # and inherit would hand every repo secret to the called workflow.
