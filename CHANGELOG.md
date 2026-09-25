@@ -1,3 +1,9 @@
+## [1.8.3](https://github.com/laurenhitchon/bastianbuilt/compare/v1.8.2...v1.8.3) (2026-09-25)
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#61](https://github.com/laurenhitchon/bastianbuilt/issues/61)) ([d1a014b](https://github.com/laurenhitchon/bastianbuilt/commit/d1a014b032678ba53cef150f188e01709d095cf1))
+
 ## [1.8.2](https://github.com/laurenhitchon/bastianbuilt/compare/v1.8.1...v1.8.2) (2026-09-25)
 
 ### Bug Fixes
