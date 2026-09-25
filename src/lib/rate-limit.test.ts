@@ -275,3 +275,64 @@ describe('checkContactRateLimit', () => {
     await expect(pending.catch(() => 'handled')).resolves.toBe('handled')
   })
 })
+
+describe('checkRateLimiterHealth', () => {
+  const answered = (overrides: Record<string, unknown> = {}) => ({
+    success: true,
+    limit: 5,
+    remaining: 4,
+    reset: Date.now() + 60_000,
+    pending: Promise.resolve(),
+    ...overrides,
+  })
+
+  it('reports disabled without touching Redis when Upstash is not configured', async () => {
+    const { checkRateLimiterHealth } = await loadModule()
+
+    await expect(checkRateLimiterHealth()).resolves.toEqual({ status: 'disabled' })
+    expect(limit).not.toHaveBeenCalled()
+  })
+
+  it('reports ok when Redis answers', async () => {
+    const { checkRateLimiterHealth } = await configured()
+    limit.mockResolvedValue(answered())
+
+    await expect(checkRateLimiterHealth()).resolves.toEqual({ status: 'ok' })
+  })
+
+  it('still reports ok when the probe bucket is exhausted', async () => {
+    // A rejection means Redis ran the script, which is all the probe asks.
+    const { checkRateLimiterHealth } = await configured()
+    limit.mockResolvedValue(answered({ success: false, remaining: 0 }))
+
+    await expect(checkRateLimiterHealth()).resolves.toEqual({ status: 'ok' })
+  })
+
+  it('reports failing when the call throws', async () => {
+    // The outage this exists for: the database was deleted and every lookup
+    // failed with ENOTFOUND while the contact form kept accepting everything.
+    const { checkRateLimiterHealth } = await configured()
+    const error = new Error('getaddrinfo ENOTFOUND')
+    limit.mockRejectedValue(error)
+
+    await expect(checkRateLimiterHealth()).resolves.toEqual({ status: 'failing', error })
+  })
+
+  it('reports failing on a timeout, which Upstash resolves instead of throwing', async () => {
+    const { checkRateLimiterHealth } = await configured()
+    limit.mockResolvedValue(answered({ reason: 'timeout' }))
+
+    await expect(checkRateLimiterHealth()).resolves.toMatchObject({ status: 'failing' })
+  })
+
+  it('probes a bucket no sender can share', async () => {
+    const { checkRateLimiterHealth } = await configured()
+    limit.mockResolvedValue(answered())
+
+    await checkRateLimiterHealth()
+
+    const [key] = limit.mock.calls[0]
+    // Sender buckets are 22-character hashes, so this can never land in one.
+    expect(key).not.toMatch(/^[\w-]{22}$/)
+  })
+})

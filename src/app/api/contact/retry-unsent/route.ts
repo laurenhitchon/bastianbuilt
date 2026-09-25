@@ -1,5 +1,6 @@
-import { sendContactNotification } from '@/lib/contact-notify'
+import { sendContactNotification, sendRateLimiterAlert } from '@/lib/contact-notify'
 import { getDb } from '@/lib/db'
+import { checkRateLimiterHealth } from '@/lib/rate-limit'
 import { contacts } from '@/lib/schema'
 import { and, asc, eq, gte, isNull } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
@@ -32,6 +33,8 @@ export async function GET(request: Request) {
   if (request.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  await checkRateLimiter()
 
   const since = new Date(Date.now() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000)
 
@@ -85,5 +88,31 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('[contact-retry] sweep failed:', error)
     return NextResponse.json({ error: 'Sweep failed' }, { status: 500 })
+  }
+}
+
+/**
+ * Piggybacks on the daily cron because a failing limiter is otherwise silent:
+ * submissions keep succeeding and only a log line records it. Runs before the
+ * sweep and never throws, so a database outage cannot skip the check and a
+ * mail failure cannot skip the sweep.
+ *
+ * `disabled` is not alerted on. Missing credentials are a deliberate state (see
+ * getLimiter in rate-limit.ts) and already log a warning on every cold start.
+ */
+async function checkRateLimiter() {
+  try {
+    const health = await checkRateLimiterHealth()
+    if (health.status !== 'failing') {
+      return
+    }
+
+    console.error('[rate-limit] health check failed:', health.error)
+    const alert = await sendRateLimiterAlert(health.error)
+    if (!alert.sent) {
+      console.error('[rate-limit] could not send the health alert:', alert.reason)
+    }
+  } catch (error) {
+    console.error('[rate-limit] health check could not complete:', error)
   }
 }
