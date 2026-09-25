@@ -1,3 +1,9 @@
+## [1.9.0](https://github.com/laurenhitchon/bastianbuilt/compare/v1.8.3...v1.9.0) (2026-09-25)
+
+### Features
+
+* email the owner when the rate limiter's Redis check fails ([#68](https://github.com/laurenhitchon/bastianbuilt/issues/68)) ([0053805](https://github.com/laurenhitchon/bastianbuilt/commit/0053805520b685d12cc588a043e9af2eeab3efb6))
+
 ## [1.8.3](https://github.com/laurenhitchon/bastianbuilt/compare/v1.8.2...v1.8.3) (2026-09-25)
 
 ### Bug Fixes
