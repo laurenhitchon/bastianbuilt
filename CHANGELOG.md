@@ -1,3 +1,9 @@
+## [1.8.2](https://github.com/laurenhitchon/bastianbuilt/compare/v1.8.1...v1.8.2) (2026-09-25)
+
+### Bug Fixes
+
+* **deps:** update next to 16.3.6 (CVE-2026-94545) ([#67](https://github.com/laurenhitchon/bastianbuilt/issues/67)) ([2146eb5](https://github.com/laurenhitchon/bastianbuilt/commit/2146eb5c038feec6dc73b637caf47b7a458c4e97))
+
 ## [1.8.1](https://github.com/laurenhitchon/bastianbuilt/compare/v1.8.0...v1.8.1) (2026-09-01)
 
 ### Bug Fixes
