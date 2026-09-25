@@ -117,3 +117,41 @@ export async function checkContactRateLimit(request: Request): Promise<RateLimit
     return allowed
   }
 }
+
+export type RateLimiterHealth =
+  { status: 'ok' } | { status: 'disabled' } | { status: 'failing'; error: unknown }
+
+/**
+ * Bucket the probe spends from. It cannot collide with a sender's bucket, which
+ * is always a 22-character hash, and one probe a day never gets near the limit.
+ */
+const HEALTH_CHECK_KEY = 'health-check'
+
+/**
+ * Runs one real `limit()` call so the same scripts a submission uses are
+ * exercised against Redis.
+ *
+ * `checkContactRateLimit` fails open, so a limiter whose database has gone away
+ * looks exactly like a working one from outside: every enquiry is accepted and
+ * the only trace is a log line. This is the check that notices. A timeout counts
+ * as failing too, because Upstash resolves it as an allowed request rather than
+ * throwing.
+ */
+export async function checkRateLimiterHealth(): Promise<RateLimiterHealth> {
+  const activeLimiter = getLimiter()
+  if (!activeLimiter) {
+    return { status: 'disabled' }
+  }
+
+  try {
+    const result = await activeLimiter.limit(HEALTH_CHECK_KEY)
+    void result.pending.catch(() => {})
+
+    if (result.reason === 'timeout') {
+      return { status: 'failing', error: new Error('Redis did not respond before the timeout') }
+    }
+    return { status: 'ok' }
+  } catch (error) {
+    return { status: 'failing', error }
+  }
+}

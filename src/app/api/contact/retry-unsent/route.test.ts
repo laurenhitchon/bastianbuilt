@@ -1,12 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { GET } from './route'
 
-const { limit, updateSet, updateWhere, send } = vi.hoisted(() => ({
+const { limit, updateSet, updateWhere, send, checkRateLimiterHealth } = vi.hoisted(() => ({
   limit: vi.fn(),
   updateSet: vi.fn(),
   updateWhere: vi.fn(),
   send: vi.fn(),
+  checkRateLimiterHealth: vi.fn(),
 }))
+
+vi.mock('@/lib/rate-limit', () => ({ checkRateLimiterHealth }))
 
 // The select chain is fluent up to `.limit()`, which is where the rows arrive.
 vi.mock('@/lib/db', () => ({
@@ -43,6 +46,7 @@ beforeEach(() => {
   updateSet.mockReturnValue({ where: updateWhere })
   updateWhere.mockResolvedValue(undefined)
   send.mockResolvedValue({ data: { id: 'test-email-id' }, error: null })
+  checkRateLimiterHealth.mockResolvedValue({ status: 'ok' })
   vi.stubEnv('CRON_SECRET', 'test-cron-secret')
   vi.stubEnv('RESEND_API_KEY', 'test-key')
 })
@@ -136,5 +140,84 @@ describe('GET /api/contact/retry-unsent', () => {
     expect(response.status).toBe(200)
     await expect(response.json()).resolves.toEqual({ scanned: 0, sent: 0, failed: 0 })
     expect(send).not.toHaveBeenCalled()
+  })
+})
+
+describe('rate limiter health check', () => {
+  const alertSends = () =>
+    send.mock.calls.filter(([message]) => message.subject.includes('rate limiting'))
+
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    vi.mocked(console.error).mockRestore()
+  })
+
+  it('does not probe Redis for an unauthorised request', async () => {
+    await sweep('Bearer not-the-secret')
+
+    expect(checkRateLimiterHealth).not.toHaveBeenCalled()
+  })
+
+  it('sends no alert when the limiter is healthy', async () => {
+    await sweep('Bearer test-cron-secret')
+
+    expect(checkRateLimiterHealth).toHaveBeenCalledOnce()
+    expect(alertSends()).toHaveLength(0)
+  })
+
+  it('sends no alert when the limiter is deliberately disabled', async () => {
+    checkRateLimiterHealth.mockResolvedValue({ status: 'disabled' })
+
+    await sweep('Bearer test-cron-secret')
+
+    expect(alertSends()).toHaveLength(0)
+  })
+
+  it('emails the owner when the limiter is failing', async () => {
+    checkRateLimiterHealth.mockResolvedValue({
+      status: 'failing',
+      error: new Error('getaddrinfo ENOTFOUND'),
+    })
+    vi.stubEnv('CONTACT_TO_EMAIL', 'owner@example.com')
+
+    await sweep('Bearer test-cron-secret')
+
+    const [[message]] = alertSends()
+    expect(message.to).toBe('owner@example.com')
+    expect(message.text).toContain('getaddrinfo ENOTFOUND')
+  })
+
+  it('still runs the sweep after alerting', async () => {
+    checkRateLimiterHealth.mockResolvedValue({ status: 'failing', error: new Error('down') })
+    limit.mockResolvedValue([row(1)])
+
+    const response = await sweep('Bearer test-cron-secret')
+
+    await expect(response.json()).resolves.toEqual({ scanned: 1, sent: 1, failed: 0 })
+    expect(send).toHaveBeenCalledTimes(2)
+  })
+
+  it('still runs the sweep when the alert itself cannot be sent', async () => {
+    checkRateLimiterHealth.mockResolvedValue({ status: 'failing', error: new Error('down') })
+    send.mockRejectedValueOnce(new Error('resend unreachable'))
+    limit.mockResolvedValue([row(1)])
+
+    const response = await sweep('Bearer test-cron-secret')
+
+    await expect(response.json()).resolves.toEqual({ scanned: 1, sent: 1, failed: 0 })
+  })
+
+  it('checks the limiter even when the sweep fails', async () => {
+    // A database outage must not also hide a Redis outage.
+    checkRateLimiterHealth.mockResolvedValue({ status: 'failing', error: new Error('down') })
+    limit.mockRejectedValue(new Error('database unreachable'))
+
+    const response = await sweep('Bearer test-cron-secret')
+
+    expect(response.status).toBe(500)
+    expect(alertSends()).toHaveLength(1)
   })
 })
