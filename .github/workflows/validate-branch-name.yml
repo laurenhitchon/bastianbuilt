@@ -12,4 +12,4 @@ permissions:
 
 jobs:
   check-branch-name:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-validate-branch-name.yml@6754b3494a47894d89e9d1b0106a64e13a1a9443 # v1
+    uses: digitalnsw/nswds-devops/.github/workflows/reusable-validate-branch-name.yml@ee6015b1c52cf79b622d7f8e8de5b08680b13b56 # v1
