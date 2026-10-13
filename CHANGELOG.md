@@ -1,3 +1,9 @@
+## [1.9.2](https://github.com/laurenhitchon/bastianbuilt/compare/v1.9.1...v1.9.2) (2026-10-13)
+
+### Bug Fixes
+
+* **deps:** update dependency motion to v14 ([#75](https://github.com/laurenhitchon/bastianbuilt/issues/75)) ([1057006](https://github.com/laurenhitchon/bastianbuilt/commit/105700683e172d90117b084df6238e8c355e0159))
+
 ## [1.9.1](https://github.com/laurenhitchon/bastianbuilt/compare/v1.9.0...v1.9.1) (2026-10-13)
 
 ### Bug Fixes
