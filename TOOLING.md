@@ -44,6 +44,11 @@ time.
 7am on Mondays, Sydney time, and every npm update waits until its release is 3
 days old. Vulnerability alerts are enabled.
 
+Renovate also keeps `.nvmrc` current. Node.js minor and patch releases join the
+non-major group PR. A new Node.js major arrives in its own PR on the same
+branch as the matching `@types/node` major. That PR needs `engines.node` in
+`package.json` changed to the new major before it can install.
+
 Renovate rebases a PR only when it conflicts with `main`. A reviewed PR that has
 fallen behind needs its rebase checkbox ticked before it can merge. The two
 automerge groups below rebase whenever they fall behind, so they never stall.
@@ -59,6 +64,13 @@ Next.js packages always arrive together in one PR for review.
 `conventional-changelog-conventionalcommits` majors are disabled, because v10
 produces empty release notes with the current release-notes generator.
 
+## Local development
+
+`.nvmrc` sets the Node.js version for local development, CI and releases.
+`engines.node` in `package.json` allows only that major, and `.npmrc` sets
+`engine-strict=true`, so npm refuses to install on any other version with
+`EBADENGINE`. Run `nvm use` in the repository before any npm command.
+
 ## Scripts
 
 Shell scripts and hook templates under `scripts/` handle commit messages,
@@ -72,6 +84,7 @@ ESLint and Prettier policy comes from the published `@nswds/eslint-config` and
 ## Checks before pushing workflow changes
 
 ```sh
+nvm use
 npm run format:check
 npm run lint
 npm run type-check

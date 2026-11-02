@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "^22.22.2 || >=24.15.0"
+    "node": "^26.13.0"
   },
   "scripts": {
     "type-check": "tsc -b",
@@ -56,7 +56,7 @@
     "@semantic-release/github": "^12.0.5",
     "@semantic-release/release-notes-generator": "^14.1.0",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^24",
+    "@types/node": "^26.6.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
