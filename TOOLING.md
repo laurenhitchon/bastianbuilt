@@ -1,41 +1,80 @@
-# Shared repository tooling
+# Repository tooling
 
-This repository uses the portable parts of
-[`digitalnsw/nswds-devops`](https://github.com/digitalnsw/nswds-devops) without
-granting DigitalNSW automation access to a personal repository.
+CI, releases and dependency updates are defined entirely in this repository.
+Nothing here reads workflows or configuration from another account at run
+time.
 
-## Distribution model
+## GitHub Actions workflows
 
-- Reusable GitHub Actions workflows are called directly from the public
-  `nswds-devops` repository. Each caller is pinned to the commit currently
-  promoted as `v1`; Renovate manages later digest updates as pull requests once
-  the Mend Renovate App is enabled for this repository.
-- Shell scripts and hook templates under `scripts/` are vendored from
-  `digitalnsw/nswds-devops` at the promoted `v1` commit `cef727d`. They are refreshed manually
-  because the DigitalNSW file-sync GitHub App is not installed on this account.
-- `scripts/branch-name-config.sh` has a small personal override: `feature/` and
-  `bugfix/` remain accepted aliases alongside the shared `feat/` and `fix/`
-  prefixes.
-- AI scripts default to `AI_MODEL=openai/gpt-5.6-sol` and
-  `AI_PROVIDER=azure`; repo-local overrides can live in the gitignored `.env`.
-- ESLint and Prettier policy comes from the published
-  `@nswds/eslint-config` and `@nswds/prettier-config` packages.
-- `renovate.json` extends the public NSWDS preset but re-enables vulnerability
-  alerts because this repository does not inherit DigitalNSW's Snyk coverage.
+| Workflow                    | Runs on                                       | What it does                                                                                                                                        |
+| --------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`                    | Pull requests                                 | Five jobs: install and build, lint, typecheck, format check and tests. Each job runs the matching `package.json` script.                            |
+| `commitlint.yml`            | Pull requests                                 | Lints every commit in the PR against `commitlint.config.mjs`.                                                                                       |
+| `validate-branch-name.yml`  | Pull requests                                 | Checks the branch name against `scripts/branch-name-config.sh`, read from the base commit.                                                          |
+| `commit-types-sync.yml`     | PRs and pushes touching the commit-type files | Runs `scripts/check-commit-types-sync.sh`.                                                                                                          |
+| `ai-pr-title.yml`           | PR opened, reopened or edited                 | Rewrites a title that is not a Conventional Commit header, using the AI Gateway. A valid title is never changed.                                    |
+| `openai-pr-description.yml` | PR opened                                     | Writes a description when the PR has none. The diff is redacted with `scripts/secret-redaction.sh` first.                                           |
+| `release.yml`               | Push to `main`                                | Runs semantic-release with `release.config.mjs`. Opens a "Release failed on main" issue on failure and closes it after the next successful release. |
 
-## Updating the vendored layer
+- **Required checks.** The "Protect main" ruleset requires `commitlint / commitlint`
+  and `install / install`, `install / lint`, `install / typecheck`,
+  `install / format` and `install / test`. Those strings are the job `name`
+  values in `commitlint.yml` and `ci.yml`. Renaming a job without updating the
+  ruleset leaves a required check that never reports.
+- **Release pushes.** `release.yml` checks out with the `RELEASE_DEPLOY_KEY`
+  secret. That deploy key is the ruleset's only bypass actor, which is what lets
+  the `chore(release)` commit reach `main`. The release job installs with
+  `--ignore-scripts`, so no dependency install script runs while that key is on
+  disk.
+- **Skipping the CI build.** Setting the repository Actions variable
+  `CI_SKIP_BUILD=true` skips `npm run build` in `install / install`. Use it only
+  if the build starts needing deploy-time environment variables. Install and
+  signature verification still run.
+- **AI workflows.** These need the `AI_GATEWAY_API_KEY` secret. They skip
+  pull requests opened by bots or from forks. They load their scripts from the
+  base commit, because the job holds that secret.
+- **Untested by PRs.** `release.yml` runs only on pushes to `main`. A change to
+  it is first exercised by the next merge.
+- **Action pins.** Actions are pinned to commit SHAs. Renovate keeps the pins
+  current.
 
-Review changes in `digitalnsw/nswds-devops`, replace the corresponding files
-under `scripts/`, preserve the personal branch aliases, then run:
+## Renovate
+
+`renovate.json` extends only Renovate's built-in presets. Updates run before
+7am on Mondays, Sydney time, and every npm update waits until its release is 3
+days old. Vulnerability alerts are enabled.
+
+Renovate rebases a PR only when it conflicts with `main`. A reviewed PR that has
+fallen behind needs its rebase checkbox ticked before it can merge. The two
+automerge groups below rebase whenever they fall behind, so they never stall.
+
+Renovate merges two kinds of update by itself once the required checks pass:
+
+| Group                            | Branch                           |
+| -------------------------------- | -------------------------------- |
+| Monthly lockfile maintenance     | `renovate/lock-file-maintenance` |
+| Patch updates to devDependencies | `renovate/dev-patch`             |
+
+Next.js packages always arrive together in one PR for review.
+`conventional-changelog-conventionalcommits` majors are disabled, because v10
+produces empty release notes with the current release-notes generator.
+
+## Scripts
+
+Shell scripts and hook templates under `scripts/` handle commit messages,
+branch names, AI requests and secret redaction. Both developers and the
+workflows above use them. `scripts/branch-name-config.sh` accepts `feature/` and
+`bugfix/` as aliases for `feat/` and `fix/`.
+
+ESLint and Prettier policy comes from the published `@nswds/eslint-config` and
+`@nswds/prettier-config` packages.
+
+## Checks before pushing workflow changes
 
 ```sh
 npm run format:check
 npm run lint
 npm run type-check
-npm run build
 actionlint .github/workflows/*.yml
 shellcheck -x -e SC1091 scripts/*.sh
 ```
-
-Do not switch workflow references back to the floating `v1` tag. The SHA pin
-keeps changes in another organisation reviewable in this repository.

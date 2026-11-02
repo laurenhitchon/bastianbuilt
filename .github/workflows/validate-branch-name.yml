@@ -1,15 +1,37 @@
-# Vendored from digitalnsw/nswds-devops for this personal repository.
-# The reusable workflow is SHA-pinned below and updated through Renovate.
-# The implementation lives in that repo's reusable-validate-branch-name.yml.
+# Checks the pull request's branch name against scripts/branch-name-config.sh.
+# The rules are read from the base commit, so a branch cannot loosen the rules
+# it is checked against.
 name: Validate Branch Name
 
 on:
   pull_request:
-    types: [opened, edited, reopened]
+    types: [opened, edited, reopened, synchronize]
 
 permissions:
   contents: read
 
 jobs:
-  check-branch-name:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-validate-branch-name.yml@a4229c0b0bf4e87fb2b64deb54fd4996b99f8e94 # v1
+  branch-name:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+          sparse-checkout: scripts/branch-name-config.sh
+          sparse-checkout-cone-mode: false
+      - name: Check branch name
+        env:
+          # Kept out of the script body: a branch name is untrusted input.
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          # shellcheck source=/dev/null
+          source scripts/branch-name-config.sh
+          if [[ "$BRANCH" =~ $BRANCH_REGEX || "$BRANCH" =~ $SNYK_REGEX ]]; then
+            echo "Branch name OK: $BRANCH"
+          else
+            echo "::error::Branch '$BRANCH' does not match the naming rules in scripts/branch-name-config.sh."
+            exit 1
+          fi

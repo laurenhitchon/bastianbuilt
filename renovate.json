@@ -1,9 +1,58 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Personal-repository overlay on the public NSWDS maintenance preset. Security alerts are re-enabled because this repository does not use the DigitalNSW Snyk integration.",
-  "extends": ["github>digitalnsw/nswds-devops"],
+  "description": "Renovate config for this personal repository. Self-contained: it extends only Renovate's built-in presets, so it never depends on another account's repository.",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":timezone(Australia/Sydney)",
+    "group:allNonMajor",
+    "helpers:pinGitHubActionDigests"
+  ],
   "enabledManagers": ["npm", "github-actions"],
+  "schedule": ["before 7am on monday"],
+  "prConcurrentLimit": 5,
+  "rebaseWhen": "conflicted",
+  "labels": ["dependencies"],
   "vulnerabilityAlerts": {
-    "enabled": true
-  }
+    "enabled": true,
+    "labels": ["dependencies", "security"]
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "automergeStrategy": "squash",
+    "schedule": ["before 7am on the first day of the month"],
+    "rebaseWhen": "behind-base-branch"
+  },
+  "packageRules": [
+    {
+      "description": "Hold every npm update until the release is 3 days old, so a broken or pulled release has time to be noticed upstream.",
+      "matchManagers": ["npm"],
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "description": "Patch updates to devDependencies merge themselves once the required checks pass. They cannot change what the site serves.",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "dev dependencies (patch)",
+      "groupSlug": "dev-patch",
+      "automerge": true,
+      "automergeStrategy": "squash",
+      "rebaseWhen": "behind-base-branch"
+    },
+    {
+      "description": "Next.js packages move together in one reviewed PR, so next and eslint-config-next never drift apart.",
+      "matchPackageNames": ["next", "eslint-config-next", "@next/**"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "next.js",
+      "groupSlug": "nextjs",
+      "automerge": false
+    },
+    {
+      "description": "conventional-changelog-conventionalcommits v10 produces empty release notes with @semantic-release/release-notes-generator 14. Stay on v9 until a compatible release-notes-generator ships.",
+      "matchPackageNames": ["conventional-changelog-conventionalcommits"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
 }

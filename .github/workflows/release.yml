@@ -1,24 +1,74 @@
-# Vendored from digitalnsw/nswds-devops for this personal repository.
-# The reusable workflow is SHA-pinned below and updated through Renovate.
-# The implementation lives in that repo's reusable-release.yml.
-# The elevated permissions live HERE: a reusable workflow can never exceed
-# what the caller grants.
+# Cuts a GitHub release with semantic-release (release.config.mjs) on every
+# push to main. The checkout uses the RELEASE_DEPLOY_KEY deploy key so the
+# "chore(release)" commit can bypass the "Protect main" ruleset; a push made
+# with GITHUB_TOKEN would be rejected.
+#
+# Pull request checks never run this workflow. Review changes to it by reading
+# them; the next push to main is the first real test.
 name: Release
 
 on:
   push:
     branches: [main]
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 permissions:
   contents: write
   issues: write
   pull-requests: write
-  id-token: write
 
 jobs:
   release:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-release.yml@a4229c0b0bf4e87fb2b64deb54fd4996b99f8e94 # v1
-    secrets:
-      # Explicit mapping, not inherit — the release needs exactly one secret,
-      # and inherit would hand every repo secret to the called workflow.
-      RELEASE_DEPLOY_KEY: ${{ secrets.RELEASE_DEPLOY_KEY }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      # --ignore-scripts: the deploy key is on disk from here on, and no
+      # release tool needs a dependency's install scripts.
+      - run: npm ci --ignore-scripts
+      - name: Verify registry signatures
+        run: npm audit signatures
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx --no-install semantic-release
+
+      # Issues are matched by exact title. GH_REPO is set because the checkout
+      # may be the step that failed.
+      - name: Close the release-failure issue after a successful release
+        if: success()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Release failed on main"
+          for n in $(gh issue list --state open --search "in:title \"$title\"" --json number,title --jq ".[] | select(.title == \"$title\") | .number"); do
+            gh issue close "$n" --comment "Release succeeded at $GITHUB_SHA: $RUN_URL"
+          done
+
+      - name: Open an issue for the failed release
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Release failed on main"
+          existing="$(gh issue list --state open --search "in:title \"$title\"" --json number,title --jq "[.[] | select(.title == \"$title\")][0].number // empty")"
+          if [[ -n "$existing" ]]; then
+            gh issue comment "$existing" --body "Failed again: $RUN_URL"
+          else
+            gh issue create --title "$title" --body "semantic-release failed for $GITHUB_SHA: $RUN_URL"
+          fi
