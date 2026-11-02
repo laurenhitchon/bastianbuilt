@@ -1,6 +1,5 @@
-# Vendored from digitalnsw/nswds-devops for this personal repository.
-# The reusable workflow is SHA-pinned below and updated through Renovate.
-# The implementation lives in that repo's reusable-commitlint.yml.
+# Lints every commit in the pull request against commitlint.config.mjs.
+# Required by the "Protect main" ruleset as "commitlint / commitlint".
 name: Commitlint
 
 on:
@@ -11,4 +10,21 @@ permissions:
 
 jobs:
   commitlint:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-commitlint.yml@a4229c0b0bf4e87fb2b64deb54fd4996b99f8e94 # v1
+    name: commitlint / commitlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Lint commit messages
+        env:
+          FROM: ${{ github.event.pull_request.base.sha }}
+          TO: ${{ github.event.pull_request.head.sha }}
+        run: npx --no-install commitlint --from "$FROM" --to "$TO" --verbose

@@ -1,23 +1,72 @@
-# Vendored from digitalnsw/nswds-devops for this personal repository.
-# The reusable workflow is SHA-pinned below and updated through Renovate.
-# The implementation lives in that repo's reusable-ai-pr-title.yml.
+# Replaces a pull request title that is not a Conventional Commit header with
+# one written by the AI Gateway, using scripts/openai-request.sh. Titles that
+# already match the rules in scripts/conventional-commit-config.sh are left
+# alone, so a hand-written title is never overwritten.
 name: AI PR Title Generator
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize, edited]
+    types: [opened, reopened, edited]
 
 permissions:
   contents: read
   pull-requests: write
 
 jobs:
-  generate-title:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-ai-pr-title.yml@a4229c0b0bf4e87fb2b64deb54fd4996b99f8e94 # v1
-    secrets:
-      # Explicit mapping, not inherit — this workflow gets only the secrets it
-      # uses; inherit would hand every repo secret to the called workflow.
-      # AI_GATEWAY_API_KEY is an org-level secret (Vercel AI Gateway).
-      AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
-      # Optional Azure OpenAI fallback key (used only on gateway HTTP 402).
-      AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+  title:
+    # Bots title their own PRs, and fork PRs get no secrets.
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Scripts come from the base commit, because this job holds secrets.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - name: Generate a title if needed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+          regex="$(scripts/conventional-commit-config.sh regex)"
+          if [[ "$PR_TITLE" =~ $regex ]]; then
+            echo "Title already follows the commit rules: $PR_TITLE"
+            exit 0
+          fi
+          if [[ -z "$AI_GATEWAY_API_KEY" ]]; then
+            echo "::warning::AI_GATEWAY_API_KEY is not set; leaving the title unchanged."
+            exit 0
+          fi
+          types="$(scripts/conventional-commit-config.sh csv)"
+          commits="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" --jq '.[].commit.message' | head -c 6000)"
+          files="$(gh pr diff "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --name-only | head -n 100)"
+
+          # shellcheck source=/dev/null
+          source scripts/openai-request.sh
+          system="You write one Conventional Commit header for a pull request. Allowed types: $types. Format: type(optional-scope): summary. Use the imperative mood, lower case after the colon, no trailing full stop, at most 72 characters. Reply with the header only."
+          user="Current title: $PR_TITLE
+
+          Commit messages:
+          $commits
+
+          Changed files:
+          $files"
+          candidate="$(openai_responses_text "$system" "$user" 200 | head -n 1 | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')" || {
+            echo "::warning::The AI request failed; leaving the title unchanged."
+            exit 0
+          }
+          if [[ ! "$candidate" =~ $regex ]]; then
+            echo "::warning::Generated title does not follow the commit rules, so it was not applied: $candidate"
+            exit 0
+          fi
+          gh pr edit "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --title "$candidate"
+          echo "Title set to: $candidate"

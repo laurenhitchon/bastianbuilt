@@ -1,6 +1,7 @@
-# Vendored from digitalnsw/nswds-devops for this personal repository.
-# The reusable workflow is SHA-pinned below and updated through Renovate.
-# The implementation lives in that repo's reusable-openai-pr-description.yml.
+# Fills in an empty pull request description with a summary written by the AI
+# Gateway, using scripts/openai-request.sh. The diff passes through
+# scripts/secret-redaction.sh first. A description that already has text is
+# never touched.
 name: Autofill PR description
 
 on:
@@ -12,12 +13,55 @@ permissions:
   pull-requests: write
 
 jobs:
-  openai-pr-description:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-openai-pr-description.yml@a4229c0b0bf4e87fb2b64deb54fd4996b99f8e94 # v1
-    secrets:
-      # Explicit mapping, not inherit — this workflow gets only the secrets it
-      # uses; inherit would hand every repo secret to the called workflow.
-      # AI_GATEWAY_API_KEY is an org-level secret (Vercel AI Gateway).
-      AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
-      # Optional Azure OpenAI fallback key (used only on gateway HTTP 402).
-      AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+  describe:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Scripts come from the base commit, because this job holds secrets.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - name: Write a description if empty
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          body="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json body --jq '.body // ""')"
+          if [[ -n "${body//[[:space:]]/}" ]]; then
+            echo "The description already has text; leaving it alone."
+            exit 0
+          fi
+          if [[ -z "$AI_GATEWAY_API_KEY" ]]; then
+            echo "::warning::AI_GATEWAY_API_KEY is not set; leaving the description empty."
+            exit 0
+          fi
+          # shellcheck source=/dev/null
+          source scripts/secret-redaction.sh
+          # shellcheck source=/dev/null
+          source scripts/openai-request.sh
+          diff="$(gh pr diff "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" | head -c 60000)"
+          diff="$(redact_sensitive_diff "$diff")"
+          title="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json title --jq .title)"
+          system="You write pull request descriptions in Markdown. Use two short sections, '## Why' and '## What changes', with plain sentences and a bulleted list. Describe only what the diff shows. Do not invent tests, issues or results."
+          user="Title: $title
+
+          Diff (may be truncated):
+          $diff"
+          summary="$(openai_responses_text "$system" "$user" 1200)" || {
+            echo "::warning::The AI request failed; leaving the description empty."
+            exit 0
+          }
+          if [[ -z "${summary//[[:space:]]/}" ]]; then
+            echo "::warning::The AI returned nothing; leaving the description empty."
+            exit 0
+          fi
+          gh pr edit "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "$summary"

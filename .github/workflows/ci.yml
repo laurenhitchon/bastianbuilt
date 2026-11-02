@@ -1,18 +1,11 @@
-# Vendored from digitalnsw/nswds-devops for this personal repository.
-# The reusable workflow is SHA-pinned below and updated through Renovate.
-# The implementation lives in that repo's reusable-ci.yml.
-# Branch rulesets require this job ("install / install") — renaming the job
-# here orphans every ruleset that references it.
+# Pull request checks. The "Protect main" ruleset requires these job names
+# exactly ("install / install", "install / lint", ...), so rename a job only
+# together with the ruleset.
 name: CI
 
 on:
   pull_request:
 
-# Rapid successive pushes to a PR previously ran full duplicate 4-job CI to
-# completion; only the latest push's run matters for the merge gate, so
-# supersede in-flight runs. Lives HERE (not in the reusable) because
-# workflow-level concurrency in a called workflow is not applied — the run
-# belongs to this caller.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -22,4 +15,80 @@ permissions:
 
 jobs:
   install:
-    uses: digitalnsw/nswds-devops/.github/workflows/reusable-ci.yml@a4229c0b0bf4e87fb2b64deb54fd4996b99f8e94 # v1
+    name: install / install
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Verify registry signatures
+        run: npm audit signatures
+      - name: Build
+        run: npm run build
+
+  lint:
+    name: install / lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  typecheck:
+    name: install / typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run type-check
+
+  format:
+    name: install / format
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+
+  test:
+    name: install / test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # --if-present: a repository with no test script passes with nothing to run.
+      - run: npm run --if-present test
