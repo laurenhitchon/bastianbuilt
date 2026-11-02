@@ -47,8 +47,12 @@ jobs:
             exit 0
           fi
           types="$(scripts/conventional-commit-config.sh csv)"
-          commits="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" --jq '.[].commit.message' | head -c 6000)"
-          files="$(gh pr diff "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --name-only | head -n 100)"
+          # Written to files first: piping gh into head would kill gh with
+          # SIGPIPE on a large PR and fail the job under pipefail.
+          gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" --jq '.[].commit.message' > "$RUNNER_TEMP/commits.txt" || true
+          gh pr diff "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --name-only > "$RUNNER_TEMP/files.txt" || true
+          commits="$(head -c 6000 "$RUNNER_TEMP/commits.txt")"
+          files="$(head -n 100 "$RUNNER_TEMP/files.txt")"
 
           # shellcheck source=/dev/null
           source scripts/openai-request.sh
@@ -60,10 +64,12 @@ jobs:
 
           Changed files:
           $files"
-          candidate="$(openai_responses_text "$system" "$user" 200 | head -n 1 | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')" || {
+          raw="$(openai_responses_text "$system" "$user" 200)" || {
             echo "::warning::The AI request failed; leaving the title unchanged."
             exit 0
           }
+          # First non-blank line, without backticks, double quotes or edge spaces.
+          candidate="$(printf '%s\n' "$raw" | tr -d '`"' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' | awk 'NF && !done { print; done = 1 }')"
           if [[ ! "$candidate" =~ $regex ]]; then
             echo "::warning::Generated title does not follow the commit rules, so it was not applied: $candidate"
             exit 0

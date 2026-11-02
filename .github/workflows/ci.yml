@@ -29,8 +29,11 @@ jobs:
       - run: npm ci
       - name: Verify registry signatures
         run: npm audit signatures
+      # A build that needs deploy-time env can be skipped by setting the repo
+      # Actions variable CI_SKIP_BUILD=true. Install and signature checks still run.
       - name: Build
-        run: npm run build
+        if: ${{ vars.CI_SKIP_BUILD != 'true' }}
+        run: npm run --if-present build
 
   lint:
     name: install / lint

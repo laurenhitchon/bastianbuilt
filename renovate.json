@@ -11,6 +11,7 @@
   "enabledManagers": ["npm", "github-actions"],
   "schedule": ["before 7am on monday"],
   "prConcurrentLimit": 5,
+  "rebaseWhen": "conflicted",
   "labels": ["dependencies"],
   "vulnerabilityAlerts": {
     "enabled": true,
@@ -20,7 +21,8 @@
     "enabled": true,
     "automerge": true,
     "automergeStrategy": "squash",
-    "schedule": ["before 7am on the first day of the month"]
+    "schedule": ["before 7am on the first day of the month"],
+    "rebaseWhen": "behind-base-branch"
   },
   "packageRules": [
     {
@@ -35,7 +37,8 @@
       "groupName": "dev dependencies (patch)",
       "groupSlug": "dev-patch",
       "automerge": true,
-      "automergeStrategy": "squash"
+      "automergeStrategy": "squash",
+      "rebaseWhen": "behind-base-branch"
     },
     {
       "description": "Next.js packages move together in one reviewed PR, so next and eslint-config-next never drift apart.",
