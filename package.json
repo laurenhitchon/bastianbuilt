@@ -7,7 +7,7 @@
   },
   "scripts": {
     "type-check": "tsc -b",
-    "test": "vitest run && node --test \"tests/**/*.test.mjs\"",
+    "test": "vitest run; v=$?; node --test \"tests/**/*.test.mjs\" && exit $v",
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
