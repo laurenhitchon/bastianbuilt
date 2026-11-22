@@ -1,10 +1,9 @@
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vitest/config'
 
-// CI keys off the presence of this file: the shared reusable-ci workflow runs
-// `npx --no-install vitest run` only when a vitest.config.* exists, and
-// otherwise reports "nothing to run". Renaming or deleting this file silently
-// turns the test job back into a no-op that still reports green.
+// CI's install / test job runs `npm run test`, which runs these vitest suites
+// (src/**/*.test.ts) and then the node:test suites in tests/. Keep both halves
+// of that script: dropping either one turns its tests into a silent no-op.
 export default defineConfig({
   test: {
     // These suites cover pure logic only, so the lighter node environment is
