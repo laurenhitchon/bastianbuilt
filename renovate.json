@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Renovate config for this personal repository. Self-contained: it extends only Renovate's built-in presets, so it never depends on another account's repository.",
+  "description": "Renovate config for this personal repository. Self-contained: it extends only Renovate's built-in presets, so it never depends on another account's repository. constraints.npm holds Renovate's own npm at v11: npm 12 refuses registry tarballs of packages that bundle dependencies (EALLOWREMOTE, npm/cli#9800), which breaks lockfile updates for semantic-release 26 and tailwindcss. Remove the hold once a fixed npm 12 can update this lockfile.",
   "extends": [
     "config:recommended",
     ":semanticCommits",
@@ -9,6 +9,7 @@
     "helpers:pinGitHubActionDigests"
   ],
   "enabledManagers": ["npm", "github-actions", "nvm"],
+  "constraints": { "npm": "^11" },
   "schedule": ["before 7am on monday"],
   "prConcurrentLimit": 5,
   "rebaseWhen": "conflicted",
