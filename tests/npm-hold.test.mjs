@@ -70,9 +70,12 @@ export function npmHoldProblems(renovate, pkg) {
     }
   }
 
+  // npm only refuses to run for a devEngines entry whose onFail is "error"
+  // (the default); "warn" and "ignore" entries cannot break Renovate.
   const devEngineManagers = [pkg.devEngines?.packageManager ?? []].flat()
   for (const entry of devEngineManagers) {
-    if (entry?.name === 'npm' && entry.version !== undefined) {
+    const blocking = entry?.onFail === undefined || entry.onFail === 'error'
+    if (entry?.name === 'npm' && entry.version !== undefined && blocking) {
       checkRange('package.json devEngines.packageManager (npm) version', entry.version)
     }
   }
@@ -171,6 +174,24 @@ describe('Renovate npm hold', () => {
       assert.deepEqual(
         npmHoldProblems(held, { devEngines: { packageManager: { name: 'npm', version: '>=11' } } }),
         [],
+      )
+    })
+
+    it('only checks devEngines entries that make npm refuse to run', () => {
+      for (const onFail of ['warn', 'ignore']) {
+        assert.deepEqual(
+          npmHoldProblems(held, {
+            devEngines: { packageManager: { name: 'npm', version: '^12', onFail } },
+          }),
+          [],
+          onFail,
+        )
+      }
+      assert.equal(
+        npmHoldProblems(held, {
+          devEngines: { packageManager: { name: 'npm', version: '^12', onFail: 'error' } },
+        }).length,
+        1,
       )
     })
   })
